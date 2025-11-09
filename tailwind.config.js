@@ -10,11 +10,10 @@ module.exports = {
         extend: {
             // 1. Custom Colors for Brand Palette
             colors: {
-                'dark-blue': '#355694',
-                'light-blue': '#2DACE3',
-                'orange-accent': '#F6A25C',
+                primarydark: "#355694", // Dark Blue
+                primarylight: "#2DACE3", // Light Blue
+                accentorange: "#F6A25C", // Orange
             },
-
             // 2. Custom Keyframes for Infinite Carousel Animation
             keyframes: {
                 'slide-loop': {

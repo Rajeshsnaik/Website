@@ -3,14 +3,11 @@ body {
     font-family: var(--font-lexend), sans-serif;
 }
 
-
-/* 🎨 Custom CSS Color Variables */
-
-:root {
-    /* Dark Blue */
+@theme {
+    /* 🎨 Custom Brand Colors */
     --color-primary-dark: #355694;
-    /* Light Blue */
     --color-primary-light: #2DACE3;
-    /* Orange */
     --color-accent-orange: #F6A25C;
+    /* 🌈 Custom Gradient */
+    --gradient-primary: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary-light));
 }
