@@ -1,171 +1,148 @@
 "use client";
 
-"use client";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaArrowRight } from "react-icons/fa";
 
-// components/Portfolio.jsx or pages/portfolio.jsx
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaArrowRight } from 'react-icons/fa'; 
-
-// --- 1. DATA DEFINITION (Remains the same) ---
-const categories = ['All Projects', 'Web Development', 'Mobile Apps', 'Consulting', 'Enterprise IT'];
+const categories = ["All Projects", "Web Development", "Mobile Apps", "Consulting", "Enterprise IT"];
 
 const projectsData = Array.from({ length: 16 }, (_, i) => ({
-    id: i + 1,
-    name: `Project Alpha ${i + 1}`,
-    description: `A successful ${i % 3 === 0 ? 'web' : i % 3 === 1 ? 'mobile' : 'enterprise'} solution delivery for a leading industry client.`,
-    category: categories[(i % 4) + 1], 
-    imageUrl: `/images/project-${(i % 5) + 1}.jpg`, 
-    link: `/portfolio/project-alpha-${i + 1}`,
+  id: i + 1,
+  name: `Project Alpha ${i + 1}`,
+  description: `A successful ${
+    i % 3 === 0 ? "web" : i % 3 === 1 ? "mobile" : "enterprise"
+  } solution delivery for a leading industry client.`,
+  category: categories[(i % 4) + 1],
+  imageUrl: `/images/project-${(i % 5) + 1}.jpg`,
+  link: `/portfolio/project-alpha-${i + 1}`,
 }));
 
-// --- 2. FRAMER MOTION VARIANTS ---
-
-const heroVariants = {
-    initial: { opacity: 0, y: -20 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
-
-// Updated card variants for smoother animation
-const cardVariants = {
-    hidden: { opacity: 0, y: 50 }, // Start lower than before
-    visible: { 
-        opacity: 1, 
-        y: 0, 
-        transition: { 
-            duration: 0.7, 
-            ease: "easeOut" // Use a smooth easing function
-        } 
-    },
-    // The scale property from before is removed for a cleaner slide-up effect
-};
-
-// --- 3. COMPONENT START ---
-
 const Portfolio = () => {
-    const [activeCategory, setActiveCategory] = useState(categories[0]);
+  const [activeCategory, setActiveCategory] = useState(categories[0]);
 
-    const filteredProjects = activeCategory === categories[0]
-        ? projectsData
-        : projectsData.filter(project => project.category === activeCategory);
+  const filteredProjects =
+    activeCategory === categories[0]
+      ? projectsData
+      : projectsData.filter((p) => p.category === activeCategory);
 
-    return (
-        <div className="bg-gray-50 min-h-screen">
-            
-            {/* 3.1. Hero Section (Remains the same) */}
-            <motion.section
-                className="relative py-24 md:py-32 text-white overflow-hidden bg-cover bg-center"
-                style={{ backgroundImage: 'url(/images/portfolio-hero-bg.jpg)' }}
-                variants={heroVariants}
-                initial="initial"
-                animate="animate"
-            >
-                {/* Overlay for better text readability */}
-                <div className="absolute inset-0 bg-indigo-900 bg-opacity-80"></div>
-                
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <motion.h1
-                        className="text-5xl font-extrabold tracking-tight sm:text-6xl"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }}
-                    >
-                        Successful projects and solutions
-                    </motion.h1>
-                    <motion.p
-                        className="mt-4 max-w-3xl mx-auto text-xl text-indigo-200"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0, transition: { delay: 0.4 } }}
-                    >
-                        Wide breadth of Web, Mobile, Software Development and Consulting services across the entire IT spectrum for all your Enterprise needs.
-                    </motion.p>
-                </div>
-            </motion.section>
-            
-            {/* 3.2. Filter/Tag Section (Remains the same) */}
-            <section className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-wrap justify-center gap-3">
-                    {categories.map((category) => (
-                        <motion.button
-                            key={category}
-                            onClick={() => setActiveCategory(category)}
-                            className={`px-6 py-2 rounded-full font-medium transition duration-300 ${
-                                activeCategory === category
-                                    ? 'bg-indigo-600 text-white shadow-lg'
-                                    : 'bg-white text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 border border-gray-200'
-                            }`}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            {category}
-                        </motion.button>
-                    ))}
-                </div>
-            </section>
-            
-            {/* 3.3. Projects Grid */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <motion.div 
-                    layout 
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-                >
-                    <AnimatePresence>
-                        {filteredProjects.map((project) => (
-                            <motion.div
-                                key={project.id}
-                                layout
-                                variants={cardVariants}
-                                initial="hidden"
-                                // --- SCROLL-TRIGGERED ANIMATION SETUP ---
-                                whileInView="visible"
-                                viewport={{ once: true, amount: 0.2 }} // Animate only once when 20% of card is visible
-                                // --- END SCROLL-TRIGGERED SETUP ---
-                                exit="hidden"
-                                className="relative bg-white rounded-xl shadow-none overflow-hidden group cursor-pointer border border-gray-100"
-                                whileHover={{ y: -5 }} 
-                            >
-                                {/* Project Image Area */}
-                                <div className="h-48 w-full overflow-hidden">
-                                    <img
-                                        src={project.imageUrl}
-                                        alt={project.name}
-                                        // --- LAZY LOADING IMPLEMENTED ---
-                                        loading="lazy" 
-                                        // --- END LAZY LOADING ---
-                                        className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
-                                    />
-                                </div>
-                                
-                                {/* Text Content (Remains the same) */}
-                                <div className="p-5">
-                                    <span className="text-xs font-semibold uppercase text-indigo-600 tracking-wider">{project.category}</span>
-                                    <h3 className="mt-1 text-xl font-bold text-gray-900 line-clamp-2">{project.name}</h3>
-                                    <p className="mt-2 text-sm text-gray-500 line-clamp-3">{project.description}</p>
-                                </div>
+  return (
+    <div className="bg-gradient-to-br from-indigo-50 via-white to-purple-50 min-h-screen font-inter">
 
-                                {/* View More Overlay on Hover (Remains the same) */}
-                                <motion.a 
-                                    href={project.link}
-                                    className="absolute inset-0 bg-indigo-600 bg-opacity-90 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 p-4 text-white text-center"
-                                >
-                                    <h4 className="2xl font-bold">{project.name}</h4>
-                                    <p className="mt-2 mb-4 text-sm font-medium">Click to view case study</p>
-                                    <span className="flex items-center text-sm font-semibold">
-                                        View More <FaArrowRight className="ml-2 w-3 h-3" />
-                                    </span>
-                                </motion.a>
+      {/* 🌟 Hero Section */}
+      <motion.section
+        className="relative py-28 md:py-36 text-white overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: "url(/images/portfolio-hero-bg.jpg)" }}
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/90 via-purple-900/80 to-indigo-800/90"></div>
 
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
-                </motion.div>
-                
-                {filteredProjects.length === 0 && (
-                    <p className="text-center text-gray-500 mt-10">No projects found in this category.</p>
-                )}
-            </section>
-            
+        <div className="relative max-w-6xl mx-auto px-6 text-center">
+          <motion.h1
+            className="text-5xl md:text-6xl font-extrabold tracking-tight leading-tight"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }}
+          >
+            Our Portfolio of Excellence
+          </motion.h1>
+          <motion.p
+            className="mt-5 max-w-3xl mx-auto text-lg md:text-xl text-indigo-200"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0, transition: { delay: 0.4 } }}
+          >
+            Delivering cutting-edge web, mobile, and enterprise solutions for clients across industries.
+          </motion.p>
         </div>
-    );
+      </motion.section>
+
+      {/* 🔹 Category Filter */}
+      <section className="py-10 max-w-6xl mx-auto px-4">
+        <div className="flex flex-wrap justify-center gap-4">
+          {categories.map((category) => (
+            <motion.button
+              key={category}
+              onClick={() => setActiveCategory(category)}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.96 }}
+              className={`px-6 py-2.5 rounded-full text-sm md:text-base font-medium transition-all duration-300 shadow-sm ${
+                activeCategory === category
+                  ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md"
+                  : "bg-white/70 backdrop-blur-md border border-gray-200 text-gray-700 hover:bg-indigo-50 hover:text-indigo-700"
+              }`}
+            >
+              {category}
+            </motion.button>
+          ))}
+        </div>
+      </section>
+
+      {/* 🧩 Project Grid */}
+      <section className="max-w-6xl mx-auto px-4 pb-20">
+        <motion.div
+          layout
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+        >
+          <AnimatePresence>
+            {filteredProjects.map((project) => (
+              <motion.div
+                key={project.id}
+                layout
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                className="relative bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-100 overflow-hidden group cursor-pointer hover:shadow-2xl transition-all duration-500"
+                whileHover={{ y: -8 }}
+              >
+                {/* Image */}
+                <div className="h-48 overflow-hidden relative">
+                  <img
+                    src={project.imageUrl}
+                    alt={project.name}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                </div>
+
+                {/* Content */}
+                <div className="p-5">
+                  <span className="text-xs font-semibold uppercase text-indigo-600 tracking-wider">
+                    {project.category}
+                  </span>
+                  <h3 className="mt-2 text-lg font-bold text-gray-900 line-clamp-2">
+                    {project.name}
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-600 line-clamp-3">
+                    {project.description}
+                  </p>
+                </div>
+
+                {/* Hover Overlay */}
+                <motion.a
+                  href={project.link}
+                  className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 text-white text-center opacity-0 group-hover:opacity-100 transition duration-500"
+                >
+                  <h4 className="text-xl font-bold">{project.name}</h4>
+                  <p className="mt-1 text-sm text-indigo-100">
+                    Click to view case study
+                  </p>
+                  <div className="mt-3 flex items-center gap-2 text-sm font-semibold">
+                    View More <FaArrowRight className="w-3 h-3" />
+                  </div>
+                </motion.a>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        {filteredProjects.length === 0 && (
+          <p className="text-center text-gray-500 mt-10">
+            No projects found in this category.
+          </p>
+        )}
+      </section>
+    </div>
+  );
 };
 
 export default Portfolio;

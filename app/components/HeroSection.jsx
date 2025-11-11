@@ -146,7 +146,7 @@ const HeroSection = () => {
                                     color: 'var(--color-primary-dark)' 
                                 }}
                             >
-                                Start Your Project Today <span className="ml-2">→</span>
+                                Start Your Project Today
                             </a>
                         </motion.div>
                     </div>

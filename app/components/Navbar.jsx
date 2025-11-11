@@ -3,13 +3,14 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image'; // 1. IMPORT NEXT.JS IMAGE
 import { 
   List, X, CornerRightUp, ChevronDown, ChevronRight, 
   Code, FileText, Users, Briefcase, TrendingUp, DollarSign, 
   ShoppingCart, Heart, Factory, Banknote, Phone, Truck, BookOpen, 
   Shield, Server, HardHat, Zap, Layout, Globe
 } from 'lucide-react';
-// REMOVED: import { useTheme } from './ThemeProvider'; // Import from ThemeProvider
+
 
 // --- MOCK COMPONENTS ---
 const Link = ({ href, children, className, onClick, ...props }) => (
@@ -417,7 +418,6 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   
-  // REMOVED: Use the theme context (const { theme, toggleTheme, ThemeIcon } = useTheme();)
   // Hardcoding theme-related styles to 'light' for a consistent look now that the theme toggle is gone.
   const theme = 'light'; 
 
@@ -437,6 +437,16 @@ const Navbar = () => {
   // MODIFIED: Simplified navBg calculation to a light-mode default
   const navBg = scrolled ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 1)'; // white equivalent
 
+  // --- LOGO CONFIGURATION ---
+  const LOGO_SRC = '/images/Logo/logo-5.png';
+  const LOGO_WIDTH = 160; // Set explicit width in pixels
+  const LOGO_HEIGHT = 40; // Set explicit height in pixels (matches h-10, h-12 etc.)
+  
+  // NOTE: When using Next/Image, the layout and size classes (like h-40 w-auto)
+  // are often replaced by explicit width/height props and potentially 'fill' or 'responsive' layout.
+  // We'll use fixed width and height for a typical navbar logo.
+
+
   return (
     <MotionHeader
       initial={false}
@@ -451,12 +461,18 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           
-          {/* Logo */}
+          {/* Logo - REPLACED WITH NEXT/IMAGE */}
           <motion.div variants={itemVariants} initial="hidden" animate="visible">
-            <Link href="/" className="flex items-center space-x-2 text-xl font-bold text-sky-500 tracking-wider">
-              <CornerRightUp className="w-6 h-6 rotate-45" />
-              {/* MODIFIED: Removed dark classes */}
-              <span className="text-gray-900">Motion</span><span className="text-sky-500">Nav</span>
+            <Link href="/" className="flex items-center">
+              <Image 
+                src={LOGO_SRC}
+                alt="Company Logo"
+                width={140} // Required prop
+                height={65} // Required prop
+                // The container div should manage the visible size. 
+                // We'll use a wrapper div to ensure the size is constrained in the link.
+                // className="w-auto h-auto" // Optional: remove h-40 if using fixed sizes
+              />
             </Link>
           </motion.div>
 

@@ -1,62 +1,90 @@
 "use client";
-
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export default function NotFound() {
+export default function NotFoundPage() {
+  const pathname = usePathname();
+
+  const isHomeActive = pathname === "/";
+
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center text-center px-6 py-10 bg-primary-dark text-white">
-      {/* Animated 404 */}
-      <motion.h1
-        initial={{ opacity: 0, y: -40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-7xl md:text-9xl font-extrabold mb-4"
-      >
-        404
-      </motion.h1>
-
-      {/* Subheading */}
-      <motion.h2
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
-        className="text-2xl md:text-3xl font-semibold mb-3"
-      >
-        Page Not Found
-      </motion.h2>
-
-      {/* Description */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 0.6 }}
-        className="text-base md:text-lg text-white/90 max-w-lg mb-8"
-      >
-        The page you’re looking for doesn’t exist or has been moved. Please check the URL or go back to where you came from.
-      </motion.p>
-
-      {/* Buttons */}
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#355694] via-[#2DACE3] to-[#F6A25C] text-white px-4 overflow-hidden">
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.7, duration: 0.6 }}
-        className="flex flex-col sm:flex-row gap-4"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="text-center flex flex-col items-center justify-center space-y-6 z-10"
       >
-        <Link
-          href="/"
-          className="bg-accent-orange hover:bg-primary-light transition-all duration-300 text-white px-6 py-3 rounded-xl font-medium shadow-lg"
+        {/* 404 Heading */}
+        <motion.h1
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="text-8xl md:text-9xl font-extrabold drop-shadow-lg"
         >
-          Go Home
-        </Link>
+          404
+        </motion.h1>
 
-        <button
-          onClick={() => window.history.back()}
-          className="border border-white/70 hover:bg-white/10 transition-all duration-300 text-white px-6 py-3 rounded-xl font-medium"
+        {/* Subtitle */}
+        <motion.h2
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="text-2xl md:text-3xl font-semibold"
         >
-          Go Back
-        </button>
+          Oops! Page Not Found
+        </motion.h2>
+
+        {/* Description */}
+        <motion.p
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="text-white/90 max-w-md text-base md:text-lg"
+        >
+          The page you’re looking for doesn’t exist or might have been moved.
+        </motion.p>
+
+        {/* Home Button */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.7 }}
+        >
+          <motion.div
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 0 20px rgba(255,255,255,0.5)",
+            }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Link
+              href="/home"
+              className={`inline-block cursor-pointer border font-semibold px-8 py-3 rounded-xl backdrop-blur-md transition-all duration-300 ${
+                isHomeActive
+                  ? "bg-white/30 border-white text-white shadow-lg"
+                  : "bg-white/10 border-white/30 text-white hover:bg-white/20"
+              }`}
+            >
+              Back to Home
+            </Link>
+          </motion.div>
+        </motion.div>
+
+        {/* Subtle Floating Glow */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.15, scale: [1, 1.2, 1] }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute w-[300px] h-[300px] bg-white rounded-full blur-3xl"
+        ></motion.div>
       </motion.div>
-    </main>
+    </section>
   );
 }

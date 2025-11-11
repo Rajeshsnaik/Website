@@ -5,6 +5,7 @@ import HeroSection from "./components/HeroSection";
 import OfferingsSection from "./components/OfferingsSection";
 import OurSolutions from "./components/OurSolutions";
 import WhyChooseUsSection from "./components/WhyChooseUsSection";
+import FeedbackCode from "./components/Feedback";
 import "./globals.css"; // Ensure Tailwind styles are imported
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
             <OfferingsSection />
             <OurSolutions />
             <WhyChooseUsSection />
+            <FeedbackCode/>
             <ContactForm />
         </main>
      

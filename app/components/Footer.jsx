@@ -7,6 +7,7 @@ import {
   Facebook, Twitter, Linkedin, Instagram
 } from 'lucide-react';
 import { useTheme } from './ThemeProvider'; // Assuming ThemeProvider is in place
+import Image from 'next/image';
 
 // --- ANIMATION VARIANTS ---
 // 1. Container for the main 6-column grid to stagger children
@@ -118,21 +119,32 @@ const Footer = () => {
         >
           
           {/* GRID 1: Logo & Slogan (Animated Item) */}
-          <motion.div 
-            className="col-span-2 lg:col-span-1 flex flex-col space-y-4"
-            variants={itemVariants}
-          >
-            <p className="text-base font-bold text-sky-600 dark:text-sky-400">
-              10+ YEARS EXPERIENCE
-            </p>
-            <div className="flex items-center space-x-2 text-2xl font-bold text-sky-500 dark:text-sky-400 tracking-wider">
-              <CornerRightUp className="w-7 h-7 rotate-45" />
-              <span className="text-gray-900 dark:text-gray-100">Blute</span><span className="text-sky-500 dark:text-sky-400">Tech</span>
-            </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 italic mt-2">
-              Driving innovation through expertise.
-            </p>
-          </motion.div>
+         <motion.div 
+    className="col-span-2 lg:col-span-1 flex flex-col space-y-4"
+    variants={itemVariants}
+>
+    <p className="text-base font-bold text-sky-600 dark:text-sky-400">
+        10+ YEARS EXPERIENCE
+    </p>
+    
+    {/* --- REPLACED SECTION START --- */}
+    <div className="flex items-center space-x-2">
+        <Image
+            src="/images/Logo/logo.png" // Path to your logo file
+            // web-app/public/images/client-logo-3.png
+            alt="Blute Tech Logo"
+            width={200} // Set the actual width of your logo
+            height={40} // Set the actual height of your logo
+            // Tailwind classes to adjust the appearance if needed
+            className="h-30 w-auto" 
+        />
+    </div>
+    {/* --- REPLACED SECTION END --- */}
+
+    <p className="text-sm text-gray-500 dark:text-gray-400 italic mt-2">
+        Driving innovation through expertise.
+    </p>
+</motion.div>
 
           {/* GRID 2: Services (Animated Item) */}
           <motion.div variants={itemVariants}>
