@@ -1,6 +1,9 @@
 // app/layout.jsx (CRITICAL FIX)
+"use client";
 
 import './globals.css';
+import { Provider } from 'react-redux';
+import { store } from '../store/stores.jsx';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
 import { Lexend } from 'next/font/google'; // 1. Import Lexend font loader
@@ -14,16 +17,16 @@ const lexend = Lexend({
 });
 
 // Standard Next.js metadata export
-export const metadata = {
-  title: 'Blute Technologies',
-  description: 'International software development company website.',
-  // Add other standard metadata fields here
-};
+// export const metadata = {
+//   title: 'Blute Technologies',
+//   description: 'International software development company website.',
+//   // Add other standard metadata fields here
+// };
 
 export default function RootLayout({ children }) {
   return (
-    // 3. APPLY FONT VARIABLE TO THE HTML TAG
-    // This allows the font to be used globally via the custom CSS or the font-lexend utility class.
+    <Provider store={store}>
+    
     <html lang="en" className={`scroll-smooth ${lexend.variable}`}>
       <body> 
         {/*
@@ -40,5 +43,6 @@ export default function RootLayout({ children }) {
           <Footer />
       </body>
     </html>
+    </Provider>
   );
 }

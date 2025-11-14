@@ -202,7 +202,7 @@ const MetricCard = () => (
 
 
 // --- Main Section Component ---
-const SolutionsSection = () => {
+const OurSolutions = () => {
     return (
         <section className="py-12 md:py-24" style={{ backgroundColor: '#ffffff' }}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -263,4 +263,4 @@ const SolutionsSection = () => {
     );
 };
 
-export default SolutionsSection;
+export default OurSolutions;

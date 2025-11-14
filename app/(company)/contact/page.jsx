@@ -43,7 +43,7 @@ export default function ContactPage() {
             className="text-lg text-white/90 leading-relaxed"
           >
             We’d love to hear from you. Whether you have a question, project idea, 
-            or just want to say hi — reach out below.
+            or just want to reach out below.
           </motion.p>
 
           <motion.div
@@ -89,6 +89,17 @@ export default function ContactPage() {
               placeholder="Enter your email"
             />
           </div>
+           <div className="mb-4">
+            <label className="block text-white font-semibold mb-2">Company Name</label>
+            <input
+              type="email"
+              name="email"
+              onChange={handleChange}
+              required
+              className="w-full bg-white/20 text-white placeholder-white/70 border border-white/30 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/50"
+              placeholder="Enter your Company Name"
+            />
+          </div>
 
           <div className="mb-6">
             <label className="block text-white font-semibold mb-2">Message</label>
@@ -108,7 +119,7 @@ export default function ContactPage() {
             type="submit"
             className="w-full bg-gradient-to-r from-[#2DACE3] to-[#F6A25C] text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
           >
-            Send Message 🚀
+            Send Message
           </motion.button>
         </motion.form>
       </motion.div>
