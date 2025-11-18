@@ -60,7 +60,6 @@ const leftCardData = {
         image: '/images/industry_bg.jpg' // PLACEHOLDER IMAGE 3
     }
 };
-// NOTE: You must update the placeholder paths above with your actual images (e.g., /images/services_bg.jpg)
 
 // Map filter keys to a representative icon for the intersecting icon
 const filterIcons = {
@@ -70,12 +69,12 @@ const filterIcons = {
 };
 
 const tabs = [
-    { name: 'SERVICES', key: 'services' },
-    { name: 'TECHNOLOGIES', key: 'technologies' }, 
-    { name: 'INDUSTRIES', key: 'industries' },
+    { name: 'Services', key: 'services' },
+    { name: 'Technologies', key: 'technologies' }, 
+    { name: 'Industries', key: 'industries' },
 ];
 
-// --- Framer Motion Variants ---
+// --- Framer Motion Variants (no change) ---
 const listContainerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -92,7 +91,6 @@ const listItemVariants = {
     visible: { opacity: 1, x: 0, transition: { type: 'tween', duration: 0.25 } } 
 };
 
-// Variants for the left card image/text animation (simple fade/scale for image, slide for text)
 const imageVariants = {
     initial: { opacity: 0.5, scale: 1.05 },
     animate: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: "easeInOut" } },
@@ -157,7 +155,7 @@ const OfferingsSection = () => {
     };
 
     const DynamicIcon = filterIcons[activeTab];
-    const cardContent = leftCardData[activeTab]; // Get the dynamic content
+    const cardContent = leftCardData[activeTab]; 
 
 
     return (
@@ -167,14 +165,16 @@ const OfferingsSection = () => {
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 
+                {/* MODIFIED: Heading changed to Title Case */}
                 <h2 className="text-3xl md:text-4xl font-extrabold text-black text-center mb-12">
-                    OUR OFFERINGS
+                    Our Offerings
                 </h2>
 
-                {/* --- Tab Navigation Pill --- */}
+                {/* --- Tab Navigation Pill - MODIFIED FOR LARGER WIDTH AND CENTERED --- */}
                 <div className="flex justify-center mb-12 px-4 sm:px-0">
                     <div 
-                        className="flex bg-white rounded-full shadow-lg p-0.5 w-full max-w-lg sm:max-w-none" 
+                        // MODIFIED: Increased max-width for a larger pill container
+                        className="flex bg-white rounded-full shadow-lg p-0.5 w-full max-w-lg" 
                         style={{ borderRadius: '50px' }}
                     >
                         {tabs.map((tab) => {
@@ -184,6 +184,7 @@ const OfferingsSection = () => {
                                 <motion.button
                                     key={tab.key}
                                     onClick={() => setActiveTab(tab.key)}
+                                    // MODIFIED: Increased padding and font size for bigger buttons
                                     className={`relative w-1/3 py-3 px-2 sm:px-10 text-sm sm:text-base font-semibold transition-colors duration-300 ease-in-out flex-shrink-0 focus:outline-none`}
                                     style={isTabActive ? { color: 'white' } : { color: primaryDark }}
                                 >
@@ -197,7 +198,7 @@ const OfferingsSection = () => {
                                     )}
 
                                     <span className="relative z-10">
-                                        {tab.name}
+                                        {tab.name} 
                                     </span>
                                 </motion.button>
                             );
@@ -206,7 +207,7 @@ const OfferingsSection = () => {
                 </div>
                 {/* --- End Tab Navigation Pill --- */}
 
-                {/* --- Content Area --- */}
+                {/* --- Content Area (no change) --- */}
                 <div className="max-w-[1200px] mx-auto w-full relative">
                     <motion.div
                         key={activeTab + "-card-container"} 
@@ -281,7 +282,7 @@ const OfferingsSection = () => {
                         </div>
                     </motion.div>
 
-                    {/* --- Floating Accent Icon (Top Position & Dynamic) --- */}
+                    {/* --- Floating Accent Icon (Commented out in original, kept commented) --- */}
                     {/* <AnimatePresence mode="wait">
                         <motion.div 
                             key={activeTab + "-floating-icon"}

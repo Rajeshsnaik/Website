@@ -6,6 +6,7 @@ export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    company: "",
     message: "",
   });
 
@@ -19,7 +20,10 @@ export default function ContactPage() {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-[#355694] via-[#2DACE3] to-[#F6A25C] flex items-center justify-center px-4 py-16">
+    <section
+      className="min-h-screen flex items-center justify-center px-4 py-16"
+      style={{ background: "var(--gradient-primary)" }}
+    >
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -36,13 +40,14 @@ export default function ContactPage() {
           >
             Let’s Talk 👋
           </motion.h1>
+
           <motion.p
             initial={{ x: -30, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
             className="text-lg text-white/90 leading-relaxed"
           >
-            We’d love to hear from you. Whether you have a question, project idea, 
+            We’d love to hear from you. Whether you have a question, project idea,
             or just want to reach out below.
           </motion.p>
 
@@ -89,11 +94,12 @@ export default function ContactPage() {
               placeholder="Enter your email"
             />
           </div>
-           <div className="mb-4">
+
+          <div className="mb-4">
             <label className="block text-white font-semibold mb-2">Company Name</label>
             <input
-              type="email"
-              name="email"
+              type="text"
+              name="company"
               onChange={handleChange}
               required
               className="w-full bg-white/20 text-white placeholder-white/70 border border-white/30 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white/50"
@@ -113,11 +119,13 @@ export default function ContactPage() {
             ></textarea>
           </div>
 
+          {/* BUTTON WITH GLOBAL GRADIENT */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             type="submit"
-            className="w-full bg-gradient-to-r from-[#2DACE3] to-[#F6A25C] text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+            className="w-full text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+            style={{ background: "var(--gradient-primary)" }}
           >
             Send Message
           </motion.button>

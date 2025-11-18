@@ -10,6 +10,10 @@ import {
   ShoppingCart, Heart, Factory, Banknote, Phone, Truck, BookOpen, 
   Shield, Server, HardHat, Zap, Layout, Globe
 } from 'lucide-react';
+import { useRouter } from "next/navigation";
+
+// inside your component
+
 
 
 // --- MOCK COMPONENTS ---
@@ -351,6 +355,7 @@ const MobileCollapsibleLink = ({ link, closeMenu }) => {
 
   const hasChildren = link.children && link.children.length > 0;
   const Icon = getIcon(link.name);
+  
 
   return (
     <motion.li variants={mobileItemVariants} role="none" className="overflow-hidden">
@@ -417,6 +422,8 @@ const MobileCollapsibleLink = ({ link, closeMenu }) => {
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const router = useRouter();
   
   // Hardcoding theme-related styles to 'light' for a consistent look now that the theme toggle is gone.
   const theme = 'light'; 
@@ -507,7 +514,10 @@ const Navbar = () => {
               <motion.button
                 whileHover={{ scale: 1.05, boxShadow: '0 0 25px rgba(56, 189, 248, 0.5)' }}
                 whileTap={{ scale: 0.95 }}
-                className="px-4 py-2 text-sm font-semibold text-white bg-sky-600 rounded-lg shadow-lg hover:bg-sky-500 transition duration-300"
+                // --- FIX APPLIED HERE ---
+                className="px-4 py-2 text-sm font-semibold text-white rounded-lg shadow-lg transition duration-300"
+                style={{ backgroundImage: 'var(--gradient-primary)' }}
+                // -------------------------
                 onClick={() => console.log('Get in Touch clicked')}
               >
                 Get in Touch
@@ -553,16 +563,35 @@ const Navbar = () => {
               ))}
               
               {/* Mobile "Get in Touch" button */}
-              <motion.li variants={mobileItemVariants} className="pt-2">
+              {/* <motion.li variants={mobileItemVariants} className="pt-2">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full px-4 py-2 text-sm font-semibold text-white bg-sky-600 rounded-lg shadow-lg hover:bg-sky-500 transition duration-300"
+                  // --- FIX APPLIED HERE ---
+                  className="w-full px-4 py-2 text-sm font-semibold text-white rounded-lg shadow-lg transition duration-300"
+                  style={{ backgroundImage: 'var(--gradient-primary)' }}
+                  // -------------------------
                   onClick={() => { console.log('Mobile Get in Touch clicked'); setIsOpen(false); }}
                 >
                   Get in Touch
                 </motion.button>
-              </motion.li>
+              </motion.li> */}
+              <motion.li variants={mobileItemVariants} className="pt-2">
+  <motion.button
+    whileHover={{ scale: 1.02 }}
+    whileTap={{ scale: 0.98 }}
+    className="w-full px-4 py-2 text-sm font-semibold text-white rounded-lg shadow-lg transition duration-300"
+    style={{ backgroundImage: "var(--gradient-primary)" }}
+    onClick={() => { 
+      console.log("Mobile Get in Touch clicked"); 
+      setIsOpen(false); 
+      router.push("/contact");   // ➜ Redirects to Contact Page
+    }}
+  >
+    Get in Touch
+  </motion.button>
+</motion.li>
+
             </motion.ul>
           </motion.div>
         )}

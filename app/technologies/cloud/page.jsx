@@ -1,10 +1,11 @@
 // app/technology/iot/page.jsx
 import React from "react";
-import IOTHeroSection from "./IOTHeroSection";
-import Solution from "./Solution";
 import OurSolutions from "../../components/OurSolutions.jsx";
-import WhyBlute from "./WhyBlute";
 import ContactParallax from "../../components/ContactParallax";
+import CloudHero from "./CloudHero.jsx";
+import TransformBusinessSection from "./TransformBusinessSection.jsx";
+import CloudSolutionSection from "./CloudSolutionSection.jsx";
+import FAQSection from "./FAQSection.jsx";
 // import OurSolutions from "./components/OurSolutions";
 
 // ------------------------------
@@ -55,14 +56,15 @@ export const metadata = {
 // ------------------------------
 // 2. Page Component
 // ------------------------------
-const IOT = () => {
+const Cloud = () => {
   return (
     <>
-      <IOTHeroSection />
-      <Solution />
+      <CloudHero/>
+      <TransformBusinessSection/>
+      <CloudSolutionSection/>
       <OurSolutions />
-      <WhyBlute />
-      <ContactParallax title="Contact Us for an IOT Projects"/>
+      <ContactParallax title="Contact Us for an IOT Assessment"/>
+      <FAQSection />
    
 
       {/* ------------------------------------
@@ -91,4 +93,4 @@ const IOT = () => {
   );
 };
 
-export default IOT;
+export default Cloud;

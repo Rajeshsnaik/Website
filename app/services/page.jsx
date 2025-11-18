@@ -6,6 +6,7 @@ import { Briefcase, Smartphone, Globe, Cloud, Palette, CheckCircle, Lightbulb, T
 import { useState, useEffect } from 'react'; // <-- IMPORTED hooks
 import ClientCarousel from '../components/ClientCarousel';
 import ContactHeroSection from '../components/ConatctForm';
+import ServicesHeroSection from './ServicesHeroSection';
 
 // --- Configuration ---
 const BRAND_COLORS = {
@@ -55,6 +56,7 @@ const MotionArrowRight = motion(ArrowRight);
 
 const ServiceCard = ({ icon: Icon, title, description }) => {
   return (
+    
     <motion.div
       variants={itemVariants}
       // Relying on intrinsic motion props (FIX for previous hydration issues)
@@ -134,6 +136,7 @@ const ServicesPage = () => {
 
   return (
     <>
+    <ServicesHeroSection />
       <Head>
         <title>Services | Blute Technologies - Software Development</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />

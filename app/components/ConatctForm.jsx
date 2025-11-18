@@ -1,314 +1,315 @@
 "use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Upload } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 
-// --- Color & Style Definitions ---
-const ACCENT_PRIMARY = '#2DACE3'; // Light Blue (Primary Accent)
-const ACCENT_SECONDARY = '#F6A25C'; // Orange (Secondary Accent/Button Highlight)
-const ACCENT_BLUE_ACCENT = '#355694'; // Original Dark Blue for glow
-const BORDER_DARK_BLACK = '#1a1a1a'; // Dark border for form/high contrast
-const BORDER_SOFT_GRAY = '#d1d5db'; // Soft gray border for inputs/internal elements
-const BORDER_DIVIDER_GRAY = '#4a5568'; // New, softer dark gray for the main divider
-const BG_LIGHT_SECTION = '#f7f8fa'; // Very light cool gray background (The 'Descent Background')
-const TEXT_DARK = '#1a1a1a'; // Dark text for contrast
+// --- Configuration and Data ---
+const STATS_DATA = [
+  { value: "10+", label: "Years of Experience", icon: "🗓️" },
+  { value: "2", label: "Global Offices", icon: "🏢" },
+  { value: "20+", label: "Satisfied Clients", icon: "🤝" },
+];
 
-// --- Framer Motion Variants ---
+const LOGO_DATA = [
+  { id: 1, name: "Partner Alpha", url: "https://placehold.co/100x50/355694/ffffff?text=Partner+1" },
+  { id: 2, name: "Partner Beta", url: "https://placehold.co/100x50/2DACE3/000000?text=Partner+2" },
+  { id: 3, name: "Partner Gamma", url: "https://placehold.co/100x50/F6A25C/000000?text=Partner+3" },
+  { id: 4, name: "Partner Delta", url: "https://placehold.co/100x50/355694/ffffff?text=Partner+4" },
+  { id: 5, name: "Partner Epsilon", url: "https://placehold.co/100x50/2DACE3/000000?text=Partner+5" },
+  { id: 6, name: "Partner Zeta", url: "https://placehold.co/100x50/F6A25C/000000?text=Partner+6" },
+];
 
-// Stagger container for a sequence of animations
-const staggerContainer = {
-  initial: {},
-  whileInView: {
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-};
+// Custom Colors mapped to Tailwind (using direct hex for accuracy)
+const PRIMARY_DARK = '#355694';
+const PRIMARY_LIGHT = '#2DACE3';
+const ACCENT_ORANGE = '#F6A25C';
 
-// Fade in and slide up (used for most elements)
-const fadeInUp = {
-  initial: { y: 40, opacity: 0 },
-  whileInView: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: 'spring',
-      stiffness: 70,
-      damping: 10,
-    },
-  },
-};
+// --- Custom Components ---
 
-// --- Reusable Components ---
+// A visually distinct input field
+// Note: Input text color remains black/gray for readability, regardless of section background.
+const CustomInput = ({ id, label, type = 'text', placeholder, isTextArea = false, value, onChange }) => (
+  <div className="flex flex-col space-y-1"> {/* Slightly reduced space-y here */}
+    <label htmlFor={id} className="text-sm font-medium text-gray-700">
+      {label}
+    </label>
+    {isTextArea ? (
+      <textarea
+        id={id}
+        name={id}
+        placeholder={placeholder}
+        rows="3" /* Reduced from 4 to 3 */
+        className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-400 transition duration-200 resize-none shadow-sm" /* py-2 for reduced height */
+        required
+        value={value}
+        onChange={onChange}
+      ></textarea>
+    ) : (
+      <input
+        id={id}
+        name={id}
+        type={type}
+        placeholder={placeholder}
+        className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-400 transition duration-200 shadow-sm" /* py-2 for reduced height */
+        required
+        value={value}
+        onChange={onChange}
+      />
+    )}
+  </div>
+);
 
-const StatCard = ({ count, label }) => (
+// Stat Card component
+const StatCard = ({ value, label, icon }) => (
   <motion.div
-    variants={fadeInUp}
-    className="p-5 md:p-6 rounded-xl border shadow-md transition-all duration-500 hover:scale-[1.03] text-center cursor-pointer" // Added cursor-pointer for hover effect
-    style={{
-      backgroundColor: '#ffffff', // Clean white background
-      borderColor: BORDER_SOFT_GRAY, // Soft border
-    }}
+    // Card background is explicitly white for contrast against the light section background
+    className="flex flex-col items-center justify-center p-4 h-32 bg-white rounded-2xl shadow-lg border-b-4"
+    style={{ borderColor: PRIMARY_LIGHT }}
+    whileHover={{ scale: 1.05, boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' }}
+    transition={{ type: "spring", stiffness: 300 }}
   >
-    <div className="text-4xl md:text-5xl font-extrabold mb-1" style={{ color: ACCENT_SECONDARY }}>
-      {count}
-    </div>
-    <div className="text-sm uppercase tracking-wider font-semibold" style={{ color: TEXT_DARK }}>{label}</div>
+    <div className="text-4xl mb-1">{icon}</div>
+    <div className="text-3xl font-extrabold" style={{ color: PRIMARY_DARK }}>{value}</div>
+    <p className="text-center text-xs text-gray-600 font-medium">{label}</p>
   </motion.div>
 );
 
-const PartnerLogo = ({ name }) => {
-  // Component for Alliances & Partnership Logos
+// Alliance Logo Scroller Component
+const LogoScroller = () => {
+  // Duplicate logos for seamless infinite scroll effect
+  const logos = [...LOGO_DATA, ...LOGO_DATA];
+
   return (
-    <motion.div
-      variants={fadeInUp}
-      className="flex items-center space-x-2 p-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-[1.05]"
-      style={{
-        backgroundColor: '#ffffff',
-        border: `1px solid ${BORDER_SOFT_GRAY}`,
-      }}
-    >
-      {/* Placeholder for actual SVG/Image logo */}
-      <div
-        className="w-4 h-4 rounded-full"
-        style={{
-          backgroundColor: ACCENT_PRIMARY,
-          boxShadow: `0 0 8px ${ACCENT_PRIMARY}`, // Subtle glow
-        }}
-      ></div>
-      <span className="text-base font-bold" style={{ color: TEXT_DARK }}>
-        {name}
-      </span>
-    </motion.div>
+    <div className="mt-8">
+      <h3 className="text-xl font-bold mb-4 text-gray-900"> {/* Updated to dark text */}
+        Alliances & Partnerships
+      </h3>
+      <div className="overflow-hidden relative h-20 w-full rounded-xl border border-gray-200 bg-white shadow-inner">
+        {/* CSS for animation (placed inline as we can only use one file) */}
+        <style jsx="true">{`
+          @keyframes scroll-logos {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Scrolls one full set of logos */
+          }
+          .logo-track {
+            display: flex;
+            width: 200%; /* Double the width to hold the duplicated logos */
+            animation: scroll-logos 25s linear infinite;
+          }
+          .logo-item {
+            flex-shrink: 0;
+            width: 12.5%; /* Assuming 8 items are visible at once (4 + 4) */
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .logo-item img {
+            max-height: 40px;
+            filter: grayscale(100%);
+            transition: filter 0.3s;
+          }
+          .logo-item:hover img {
+            filter: grayscale(0%);
+          }
+        `}</style>
+
+        <div className="logo-track">
+          {logos.map((logo, index) => (
+            <div key={`${logo.id}-${index}`} className="logo-item">
+              <img
+                src={logo.url}
+                alt={logo.name}
+                onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/100x50/ccc/000?text=Logo" }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
-const ContactForm = () => {
-  // Simple state for demonstration
-  const [formData, setFormData] = React.useState({});
-  const [isNdaChecked, setIsNdaChecked] = React.useState(false);
+// --- Main App Component ---
+export default function ConatctForm() {
+  const controls = useAnimation();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    message: '',
+    country: 'USA',
+  });
+  const [submitStatus, setSubmitStatus] = useState(null); // success | error | null
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Submitted:', formData, 'NDA:', isNdaChecked);
-    // Add your actual form submission logic here
+    console.log("Form Submitted:", formData);
+    
+    // Simulate API call success (replacing the prohibited alert())
+    setSubmitStatus('success');
+    setTimeout(() => setSubmitStatus(null), 5000); // Clear message after 5 seconds
+
+    // Reset form
+    setFormData({
+      name: '',
+      email: '',
+      company: '',
+      message: '',
+      country: 'USA',
+    });
   };
 
-  const InputField = ({ label, id, type = 'text', rows = 1 }) => (
-    <div className="mb-4">
-      <label htmlFor={id} className="text-sm font-medium sr-only" style={{ color: TEXT_DARK }}>
-        {label}
-      </label>
-      {rows > 1 ? (
-        <textarea
-          id={id}
-          rows={rows}
-          placeholder={label}
-          className="w-full p-3 mt-1 rounded-lg border focus:ring-2 focus:ring-opacity-50 transition-all focus:ring-blue-500" // Added focus ring for accessibility
-          style={{
-            backgroundColor: '#ffffff',
-            borderColor: BORDER_SOFT_GRAY,
-            color: TEXT_DARK,
-            resize: 'vertical',
-            boxShadow: '0 0 5px rgba(0, 0, 0, 0.05)',
-            minHeight: '100px',
-          }}
-          onChange={(e) => setFormData({ ...formData, [id]: e.target.value })}
-        ></textarea>
-      ) : (
-        <input
-          type={type}
-          id={id}
-          placeholder={label}
-          className="w-full p-3 mt-1 rounded-lg border focus:ring-2 focus:ring-opacity-50 transition-all focus:ring-blue-500"
-          style={{
-            backgroundColor: '#ffffff',
-            borderColor: BORDER_SOFT_GRAY,
-            color: TEXT_DARK,
-            boxShadow: '0 0 5px rgba(0, 0, 0, 0.05)',
-          }}
-          onChange={(e) => setFormData({ ...formData, [id]: e.target.value })}
-        />
-      )}
-    </div>
-  );
+  const countryOptions = ["USA", "Canada", "UK", "Australia", "India", "Germany", "Other"];
+
+  // Framer Motion Sequence for header entrance
+  useEffect(() => {
+    controls.start(i => ({
+      y: 0,
+      opacity: 1,
+      transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" }
+    }));
+  }, [controls]);
+
+  const variants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0 },
+  };
 
   return (
-    <motion.div
-      variants={fadeInUp} // Applied motion variant to the form container
-      className="p-6 md:p-8 lg:p-10 rounded-2xl shadow-2xl relative z-10 w-full"
-      style={{
-        backgroundColor: '#ffffff', // Pure white form background
-        border: `1px solid ${BORDER_DARK_BLACK}`, // Dark border for contrast
-        // Subtle, colored shadow for a premium look
-        boxShadow: `0 15px 30px -10px rgba(45, 172, 227, 0.2), 0 0 10px rgba(0, 0, 0, 0.05)`,
-      }}
-    >
-      <h3 className="text-3xl font-bold mb-6" style={{ color: TEXT_DARK }}>
-        Start a Conversation
-      </h3>
-      <form onSubmit={handleSubmit}>
-        <InputField label="Your Full Name" id="name" />
-        <InputField label="Work Email" id="email" type="email" />
-        <InputField label="Company / Organization" id="company" />
-        <InputField label="Tell us about your project" id="details" rows={4} />
-
-        {/* NDA and Attach File Row */}
-        <div className="flex items-center justify-between mt-4 mb-8 text-sm">
-          <label className="flex items-center cursor-pointer select-none" style={{ color: TEXT_DARK }}>
-            <input
-              type="checkbox"
-              className="form-checkbox h-4 w-4 rounded transition duration-150 ease-in-out"
-              style={{
-                backgroundColor: '#ffffff',
-                borderColor: BORDER_SOFT_GRAY,
-                color: ACCENT_PRIMARY,
-              }}
-              checked={isNdaChecked}
-              onChange={() => setIsNdaChecked(!isNdaChecked)}
-            />
-            <span className="ml-2 font-medium">Request NDA</span>
-          </label>
-
-          <a href="#" className="flex items-center font-medium transition-colors hover:opacity-80" style={{ color: ACCENT_PRIMARY }}>
-            <Upload className="h-4 w-4 mr-1" />
-            Attach File
-          </a>
-        </div>
-
-        {/* Submit Button with Gradient and Hover Effect */}
-        <motion.button
-          type="submit"
-          className="w-full text-white font-bold py-3 px-4 rounded-xl text-lg relative overflow-hidden group transition-all duration-300 ease-out shadow-lg"
-          style={{
-            backgroundImage: `linear-gradient(90deg, ${ACCENT_SECONDARY}, ${ACCENT_PRIMARY})`,
-            boxShadow: `0 8px 25px rgba(246, 162, 92, 0.3)`, // Orange glow
-          }}
-          // Framer motion interactive styles
-          whileHover={{ scale: 1.02, boxShadow: `0 12px 30px rgba(246, 162, 92, 0.5)` }}
-          whileTap={{ scale: 0.98 }}
-        >
-          SUBMIT YOUR REQUEST
-        </motion.button>
-      </form>
-    </motion.div>
-  );
-};
-
-// --- Main Component ---
-const ContactHeroSection = () => {
-  return (
-    <section
-      className="py-16 sm:py-24 overflow-hidden relative"
-      style={{
-        fontFamily: 'Inter, sans-serif',
-        backgroundColor: BG_LIGHT_SECTION, // Full width 'descent background'
-        minHeight: '100vh',
-        color: TEXT_DARK, // Global dark text color
-      }}
-    >
-      {/* Background radial gradient glow for atmosphere */}
-      <div
-        className="absolute inset-0 z-0 opacity-10"
-        style={{
-          background: `radial-gradient(circle at 10% 20%, ${ACCENT_PRIMARY} 0%, transparent 30%), radial-gradient(circle at 90% 80%, ${ACCENT_BLUE_ACCENT} 0%, transparent 35%)`,
-        }}
-      ></div>
-
-      {/* Content wrapper: Max width 90% (max-w-7xl) and centered (mx-auto) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* 1. Left (Content) and Right (Form) Columns */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start mb-16">
+    <div className="font-sans bg-white">
+      
+      {/* MAIN CONTENT AREA - 
+        1. Changed background to very low opacity blue (bg-indigo-50).
+        2. Restored full padding (p-X utilities).
+      */}
+      <div className="p-4 sm:p-8 lg:p-12 bg-indigo-50"> 
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-stretch">
           
-          {/* LEFT COLUMN: Promotional Content */}
+          {/* LEFT SIDE: Headings, Stats, and Alliances */}
           <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="whileInView"
-            viewport={{ once: true, amount: 0.2 }} // Animation runs only once when entering viewport
-            className="pt-4" // slight padding to align with sticky form on large screens
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+            variants={variants}
+            className="space-y-8" /* Spacing retained for visual flow */
           >
-            {/* Title */}
-            <motion.h2
-              variants={fadeInUp}
-              className="text-4xl md:text-6xl font-extrabold my-4 leading-tight"
+            {/* Text color updated to dark gray for contrast against light blue background */}
+            <motion.h1
+              custom={0}
+              initial="hidden"
+              animate={controls}
+              className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 text-left" 
             >
-              LET&apos;S BRING YOUR NEXT BIG IDEA TO <span style={{ color: ACCENT_SECONDARY }}>LIFE</span>
-            </motion.h2>
-
-            {/* Sub Content (2 Lines) */}
-            <motion.p variants={fadeInUp} className="text-xl max-w-lg mb-4">
-              Share your vision – we&apos;ll transform it into intelligent, scalable, and high-performance digital solutions.
-            </motion.p>
-            <motion.p variants={fadeInUp} className="text-lg max-w-lg mb-10 text-gray-600">
-              Our team combines deep industry expertise with cutting-edge technology to deliver results that matter.
-            </motion.p>
-
-            {/* 4 Small Boxes (Content A -> Stat Cards) */}
-            <motion.div
-              variants={staggerContainer} // Nested stagger for the cards
-              initial="initial"
-              whileInView="whileInView"
-              viewport={{ once: true, amount: 0.1 }}
-              className="grid grid-cols-2 gap-4 max-w-xl"
+              Let's Build Something Great Together
+            </motion.h1>
+            <motion.p
+              custom={1}
+              initial="hidden"
+              animate={controls}
+              className="text-xl text-gray-700 text-left" 
             >
-              <StatCard count="200+" label="Projects Delivered" />
-              <StatCard count="150+" label="Global Clients" />
-              <StatCard count="5" label="International Offices" />
-              <StatCard count="50+" label="Years of Combined Experience" />
-            </motion.div>
+              Partner with us to transform your vision into reality.
+            </motion.p>
+
+            {/* STATS ROW */}
+            <div className="grid grid-cols-3 gap-4">
+              {STATS_DATA.map((stat, index) => (
+                <motion.div 
+                  key={stat.label}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                >
+                  <StatCard {...stat} />
+                </motion.div>
+              ))}
+            </div>
+
+            {/* ALLIANCES & PARTNERSHIPS SCROLLER */}
+            <LogoScroller />
+
           </motion.div>
 
-          {/* RIGHT COLUMN: Contact Form (Made 'sticky' to visually match height on scroll) */}
-          <motion.div 
-            className="lg:sticky lg:top-8 w-full"
-            // The sticky property ensures the form stays in view or matches the top of the left column
+          {/* RIGHT SIDE: Contact Form */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            variants={variants}
           >
-            <ContactForm />
-          </motion.div>
-        </div>
+            {/* Form background updated to solid white for clear separation */}
+            <div className="p-4 sm:p-5 bg-white border border-gray-200 rounded-3xl shadow-xl h-full"> 
+              <h3 className="text-2xl font-bold mb-6 text-gray-800">
+                Ready to start?
+              </h3>
+              
+              {/* Submission Feedback Message */}
+              {submitStatus === 'success' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-3 mb-4 text-sm font-medium text-green-800 bg-green-100 rounded-lg"
+                >
+                  🚀 Success! Your message has been sent. We'll be in touch shortly.
+                </motion.div>
+              )}
 
-        {/* 2. Full Width Content (Alliances and Quote) - Below the two columns */}
-        <motion.div
-          variants={staggerContainer}
-          initial="initial"
-          whileInView="whileInView"
-          viewport={{ once: true, amount: 0.1 }}
-          className="w-full pt-12 mt-12"
-          style={{ borderTop: `1px solid ${BORDER_DIVIDER_GRAY}` }} // Divider line
-        >
+              <form onSubmit={handleSubmit} className="space-y-4"> 
+                
+                <CustomInput id="name" label="Name" placeholder="Your full name" name="name" value={formData.name} onChange={handleChange} />
+                <CustomInput id="email" label="Email" type="email" placeholder="you@example.com" name="email" value={formData.email} onChange={handleChange} />
+                <CustomInput id="company" label="Company Name (Optional)" placeholder="Your company name" name="company" value={formData.company} onChange={handleChange} />
 
-          {/* Alliances & Partnerships */}
-          <motion.div variants={fadeInUp} className="mb-12">
-            <h3 className="text-lg uppercase tracking-widest font-semibold mb-6" style={{ color: ACCENT_PRIMARY }}>
-              Alliances & Strategic Partnerships
-            </h3>
-            {/* Partnership logos wrapper */}
-            <div className="flex flex-wrap gap-4">
-              <PartnerLogo name="Microsoft" />
-              <PartnerLogo name="Oracle" />
-              <PartnerLogo name="AWS" />
-              <PartnerLogo name="SAP" />
-              <PartnerLogo name="Google Cloud" />
-              <PartnerLogo name="Salesforce" />
+                {/* Country Select */}
+                <div className="flex flex-col space-y-1"> 
+                  <label htmlFor="country" className="text-sm font-medium text-gray-700">
+                    Country
+                  </label>
+                  <select
+                    id="country"
+                    name="country"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-400 transition duration-200 shadow-sm appearance-none" 
+                    required
+                    value={formData.country}
+                    onChange={handleChange}
+                  >
+                    {countryOptions.map(country => (
+                      <option key={country} value={country}>{country}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <CustomInput id="message" label="Message" placeholder="Tell us about your project goals..." isTextArea={true} name="message" value={formData.message} onChange={handleChange} />
+
+                {/* Submit Button */}
+                <motion.button
+                  type="submit"
+                  className="w-full text-white font-bold py-3 px-6 rounded-2xl text-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-[1.01]" 
+                  style={{ background: `linear-gradient(135deg, ${PRIMARY_DARK}, ${PRIMARY_LIGHT})` }}
+                  whileHover={{ scale: 1.015 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Talk to our team
+                </motion.button>
+
+                {/* Disclaimer */}
+                <p className="text-xs text-center text-gray-500 pt-2">
+                  By sending this form I confirm that I have read and accept Blute Technologies' <a href="#" className="font-medium underline" style={{ color: PRIMARY_LIGHT }}>Privacy Policy</a>
+                </p>
+              </form>
             </div>
           </motion.div>
-
-          {/* Last Mentioned Line */}
-          <motion.p
-            variants={fadeInUp}
-            className="text-lg italic font-light mt-12 pt-4 border-t"
-            style={{ color: ACCENT_PRIMARY, borderColor: BORDER_SOFT_GRAY }}
-          >
-            &quot;Trusted by Industry Leaders. Driven by Innovation. Ready for Your Challenge.&quot;
-          </motion.p>
-
-        </motion.div>
+        </div>
       </div>
-    </section>
+    </div>
   );
-};
-
-export default ContactHeroSection;
+}

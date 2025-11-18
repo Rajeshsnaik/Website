@@ -179,7 +179,8 @@ const TechStackSection = () => {
     const primaryLight = "#2DACE3";
 
     return (
-        <section className="px-4 sm:px-6 lg:px-8 bg-gray-50"> 
+        <section className="px-4 sm:px-6 lg:px-8 pb-1 bg-gray-50">
+
             
             {/* Section Header */}
             <div className="text-center mb-12">
