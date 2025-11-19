@@ -63,7 +63,7 @@ const Cloud = () => {
       <TransformBusinessSection/>
       <CloudSolutionSection/>
       <OurSolutions />
-      <ContactParallax title="Contact Us for an IOT Assessment"/>
+      <ContactParallax title="Contact Us for an Cloud Projects"/>
       <FAQSection />
    
 
