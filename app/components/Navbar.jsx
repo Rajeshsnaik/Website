@@ -56,18 +56,7 @@ const getIcon = (name) => {
 
 const NAV_LINKS = [
   { name: 'Home', href: '/' },
-  { 
-    name: 'About', 
-    href: '/about',
-    children: [
-      { name: 'Team', href: '/team' },
-      { name: 'Portfolio', href: '/portfolio' },
-      { name: 'Career', href: '/career' },
-      { name: 'Clients', href: '/clients' },
-      { name: 'Privacy Policy', href: '/privacy-policy' },
-      { name: 'Terms of Use', href: '/terms-of-use' },
-    ]
-  },
+
   {
     name: 'Industries',
     href: '/industries',
@@ -132,8 +121,21 @@ const NAV_LINKS = [
       { name: 'DevOps', href: '/services/devops' },
       { name: 'DevSecOps', href: '/services/devsecops' },
     ]
-  },
-  { name: 'Contact', href: '/contact' },
+  }, 
+  { 
+  name: 'Company', 
+  href: '/about',
+  children: [
+    { name: 'About', href: '/about' },
+    { name: 'Career', href: '/career' },
+    { name: 'Clients', href: '/clients' },
+    { name: 'Contact', href: '/contact' },
+    { name: 'Portfolio', href: '/portfolio' },
+    { name: 'Privacy Policy', href: '/privacy-policy' },
+    { name: 'Team', href: '/team' },
+    { name: 'Terms of Use', href: '/terms-of-use' }
+  ]
+}
 ];
 
 

@@ -1,5 +1,6 @@
 "use client";
 
+import ContactParallax from "../../components/ContactParallax";
 import OurSolutions from "../../components/OurSolutions";
 import AboutHeroCode from "./AboutHeroCode";
 import AboutOurClients from "./AboutOurClients";
@@ -15,8 +16,10 @@ export default function Contact() {
            <CompanyStats/>
            <MissionVision/>
            <AboutOurClients/>
+           {/* one more left here  - Technology Excellence */}
            <AlliancesPartnerships/>
            <OurSolutions/>
+           <ContactParallax title="Talk to Us"/>
            <CompanyLocation/>
         </>
      
