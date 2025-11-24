@@ -1,9 +1,11 @@
 "use client";
 
+import IndustriesHero from "./IndustriesHero";
+
 export default function Industries() {
     return (
         <>
-           <h1>Indutries Page</h1>
+           <IndustriesHero/>
         </>
      
     )

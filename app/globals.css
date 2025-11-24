@@ -1,6 +1,10 @@
 @import "tailwindcss";
+:root {
+    font-family: var(--font-lexend);
+}
+
 body {
-    font-family: var(--font-lexend), sans-serif;
+    font-family: var(--font-lexend);
 }
 
 @theme {
