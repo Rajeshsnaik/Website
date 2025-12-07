@@ -26,7 +26,7 @@ const filterVariants = {
   visible: { opacity: 1, scale: 1, transition: { duration: 0.5, type: "spring", stiffness: 100 } },
 };
 
-const TechnologyHero = () => {
+const ServicesHero = () => {
   // Define custom styles based on the theme variables
   const primaryDark = '#355694';
   const primaryLight = '#2DACE3';
@@ -47,7 +47,7 @@ const TechnologyHero = () => {
         <div 
           className="w-full h-full bg-cover bg-center" 
           style={{ 
-            backgroundImage: "url('/images/industry-bg.webp')", // Change this path
+            backgroundImage: "url('/images/services-bg.webp')", // Change this path
             backgroundColor: "#000", // Fallback color
           }}
           aria-hidden="true"
@@ -96,7 +96,7 @@ const TechnologyHero = () => {
             >
               •
             </span>
-            Technology
+            Services
           </motion.div>
 
           {/* B. Heading (Two lines) */}
@@ -123,4 +123,4 @@ const TechnologyHero = () => {
   );
 };
 
-export default TechnologyHero;
+export default ServicesHero;

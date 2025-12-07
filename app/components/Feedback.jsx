@@ -2,89 +2,88 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
-// --- Sample Data for 6 Testimonials ---
 const testimonials = [
   {
     id: 1,
     name: "Alex Johnson",
     company: "Innovate Solutions Inc.",
-    feedback: "The development team exceeded expectations! The final product is fast, beautiful, and exactly what we needed. Highly recommend their expertise. This extra sentence ensures the card size is robust enough for longer content and tests the wrapping functionality across multiple lines.",
-    imageUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?fit=crop&w=300&h=300&q=80"
+    feedback: "The development team exceeded expectations! The final product is fast, beautiful, and exactly what we needed. Highly recommend their expertise.",
+    imageUrl: "/feedback-1.jpg"
   },
   {
     id: 2,
     name: "Maria Rodriguez",
     company: "Global Ventures Co.",
-    feedback: "Amazing attention to detail and flawless execution. The use of Next.js and Tailwind made for an incredibly performant site. A pleasure to work with. We are absolutely thrilled with the results we've seen since launching the new design.",
-    imageUrl: "https://images.unsplash.com/photo-1580489944761-15a19d654956?fit=crop&w=300&h=300&q=80"
+    feedback: "Amazing attention to detail and flawless execution. The use of Next.js and Tailwind made for an incredibly performant site. A pleasure to work with from start to finish.",
+    imageUrl: "/feedback-2.jpg"
   },
   {
     id: 3,
     name: "David Lee",
     company: "Future Tech Ltd.",
-    feedback: "They turned our complex requirements into a simple, elegant solution. The performance boost from their optimized code is significant. Top-tier service! We are incredibly happy with the results and will surely use their services again.",
-    imageUrl: "https://images.unsplash.com/photo-1507003211169-0a812d6ce89d?fit=crop&w=300&h=300&q=80"
+    feedback: "Top-tier service! We are incredibly happy with the results and will surely use their services again.",
+    imageUrl: "/feedback-3.jpg"
   },
   {
     id: 4,
     name: "Sarah Chen",
     company: "Creative Agency Hub",
-    feedback: "Responsive design was a key factor for us, and the team delivered perfectly. The Framer Motion animations add a polished, modern feel. The entire process was seamless and highly collaborative.",
-    imageUrl: "https://images.unsplash.com/photo-1542155823-1493011c7501?fit=crop&w=300&h=300&q=80"
+    feedback: "Responsive design was a key factor for us, and the team delivered perfectly. The Framer Motion animations add a polished, modern feel. The collaborative process was seamless.",
+    imageUrl: "/feedback-4.jpg"
   },
   {
     id: 5,
     name: "Michael B.",
     company: "Venture Capital Group",
-    feedback: "Professional, timely, and experts in the modern web stack. Our new investor portal is secure, fast, and visually appealing. Five stars!",
-    imageUrl: "https://images.unsplash.com/photo-1506794778202-dfa929662758?fit=crop&w=300&h=300&q=80"
+    feedback: "Professional, timely, and experts in the modern web stack.",
+    imageUrl: "/feedback-5.jpeg"
   },
   {
     id: 6,
     name: "Olivia W.",
     company: "E-Commerce Startup",
-    feedback: "The site's load speed is incredible, which has directly impacted our conversion rates. The continuous loop of the testimonials looks fantastic! We saw a 20% increase in mobile performance immediately after deployment.",
-    imageUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29329?fit=crop&w=300&h=300&q=80"
+    feedback: "The site's load speed is incredible. We saw a 20% increase in mobile performance immediately.",
+    imageUrl: "/feedback-6.jpeg"
   }
 ];
 
-// --- Card Component for each Testimonial ---
+// --- Card Component ---
 const TestimonialCard = ({ testimonial }) => (
-  // Card Wrapper: ensures only 3 cards are visible on desktop (w-[calc(100%/3)])
-  <div className="flex-none w-full lg:w-[calc(100%/3)] px-4 mb-8"> 
-    {/* Card Body: Changed to flex-col to stack header and feedback, using h-full for alignment */}
-    <div className="bg-white border border-gray-100 shadow-xl rounded-2xl p-8 flex flex-col h-full"> 
+  // 1. 'h-full' ensures the wrapper fills the parent's stretched height
+  <div className="flex-none w-full md:w-1/2 lg:w-1/3 px-4 h-full"> 
+    
+    {/* 2. 'h-full' + 'flex flex-col' ensures the white card fills the wrapper */}
+    <div className="group relative bg-white border border-gray-100 shadow-lg rounded-[2rem] p-8 h-full flex flex-col hover:shadow-xl transition-shadow duration-300">
       
-      {/* 1. Header Row: Image + Name/Company (flex row) */}
-      <div className="flex items-center space-x-6 pb-6 border-b border-gray-100 mb-6"> 
-        
-        {/* Left Side: Image */}
-        <div className="flex-shrink-0">
-          <img
-            className="w-24 h-24 object-cover rounded-full border-4 border-indigo-500"
+      {/* Hover Border Effect */}
+      <div className="absolute inset-0 rounded-[2rem] border-2 border-transparent group-hover:border-[var(--color-primary-light)] transition-colors duration-300 pointer-events-none"></div>
+
+      {/* Header Row */}
+      <div className="flex items-center space-x-4 mb-6 relative z-10 flex-shrink-0"> 
+        <div className="flex-shrink-0 relative w-16 h-16 rounded-full overflow-hidden border-2 border-gray-50">
+          <Image
             src={testimonial.imageUrl}
             alt={testimonial.name}
-            onError={(e) => { e.target.onerror = null; e.target.src = "https://via.placeholder.com/96" }}
+            fill
+            className="object-cover"
+            unoptimized 
           />
         </div>
-
-        {/* Right Side: Name and Company Stack */}
         <div> 
-          {/* Company Name (Very Small, Less Opacity) */}
-          <p className="text-xs font-medium text-gray-500 mb-0 uppercase tracking-wider opacity-75">
-            {testimonial.company}
-          </p>
-          {/* Client Name (Bit Smaller) */}
-          <h3 className="text-xl font-bold text-gray-900 leading-tight">
+          <h3 className="text-lg font-bold text-[var(--color-primary-dark)] leading-tight">
             {testimonial.name}
           </h3>
+          <p className="text-xs font-bold text-[var(--color-accent-orange)] tracking-wider mt-1">
+            {testimonial.company}
+          </p>
         </div>
       </div>
       
-      {/* 2. Feedback Body: Takes Full Width */}
-      <div className="flex-grow whitespace-normal"> 
-        <p className="text-sm text-gray-600 italic leading-relaxed">
+      {/* Feedback Body - 'flex-grow' pushes bottom content down if needed */}
+      <div className="flex-grow relative z-10"> 
+        <p className="text-sm text-gray-600 leading-relaxed italic">
           "{testimonial.feedback}"
         </p>
       </div>
@@ -92,63 +91,65 @@ const TestimonialCard = ({ testimonial }) => (
   </div>
 );
 
-// --- Main Carousel Component ---
 const TestimonialCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const cardCount = testimonials.length;
-  // Controls how many items are visible (3 on desktop)
-  const visibleItems = 3; 
-  const totalSlides = Math.ceil(cardCount / visibleItems);
-
-  // Auto-rotate logic
+  
   useEffect(() => {
     const interval = setInterval(() => {
-      // Move to the next index, wrapping around to 0
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % totalSlides);
-    }, 5000); // Change slide every 5 seconds
-
+        setCurrentIndex((prev) => (prev + 1) % (testimonials.length - 2)); 
+    }, 4000);
     return () => clearInterval(interval);
-  }, [totalSlides]);
-
-  // Calculate the 'x' offset for the motion container
-  const translateXValue = `-${currentIndex * (100 / (cardCount / visibleItems))}%`;
+  }, []);
 
   return (
-    <section className="py-24 bg-gray-50 overflow-hidden font-sans">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-16">
-          Client Feedback & Testimonials ✨
-        </h2>
+ <section className="relative w-full py-12 md:py-16 bg-white font-sans">
+      <div className="container mx-auto px-4 max-w-7xl h-full">
+        
+        {/* Header */}
+        <div className="text-center mb-10 max-w-3xl mx-auto">
+            <h2 
+                className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight"
+                style={{
+                    background: "var(--gradient-primary)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                }}
+            >
+                Client Feedback
+            </h2>
+        </div>
 
         {/* Carousel Container */}
-        <div className="relative">
-          <div className="overflow-hidden">
+        <div className="relative overflow-hidden py-4"> 
             <motion.div
-              className="flex whitespace-nowrap" // Required for horizontal scroll animation
-              style={{ x: translateXValue }}
-              animate={{ x: translateXValue }}
-              transition={{ type: "spring", stiffness: 60, damping: 20 }}
+              // 3. 'items-stretch' is the MAGIC property. It forces all flex children to match the height of the tallest child.
+              className="flex items-stretch" 
+              animate={{ x: `-${currentIndex * (100 / 3)}%` }} 
+              transition={{ type: "spring", stiffness: 50, damping: 20 }}
             >
               {testimonials.map((t) => (
                 <TestimonialCard key={t.id} testimonial={t} />
               ))}
             </motion.div>
-          </div>
+        </div>
           
-          {/* Dots/Navigation */}
-          <div className="flex justify-center m-5 space-x-4">
-            {[...Array(totalSlides)].map((_, index) => (
+        {/* Dots */}
+        <div className="flex justify-center mt-8 space-x-3">
+            {[...Array(testimonials.length - 2)].map((_, index) => (
               <button
                 key={index}
-                className={`w-4 h-4 rounded-full transition-colors duration-300 ${
-                  currentIndex === index ? 'bg-indigo-600 shadow-md' : 'bg-indigo-300 hover:bg-indigo-400'
-                }`}
                 onClick={() => setCurrentIndex(index)}
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                  currentIndex === index 
+                    ? 'bg-[var(--color-primary-light)] w-8' 
+                    : 'bg-gray-200 hover:bg-gray-300'
+                }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}
-          </div>
         </div>
+
       </div>
     </section>
   );

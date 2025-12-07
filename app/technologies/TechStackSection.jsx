@@ -3,53 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-// --- TechPill Component (Icon Presentation) ---
-
-/**
- * Reusable component that uses an <img> tag for icons from the public folder.
- */
-const TechPill = ({ name, iconPath }) => {
-    const imgSrc = `/images/${iconPath}`;
-    const primaryLight = "#2DACE3"; 
-
-    return (
-        <motion.div
-            // Framer Motion Props for the hover effect
-            whileHover={{ scale: 1.08 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            
-            // Tailwind CSS Styling: Column layout
-            className="flex flex-col items-center justify-start text-gray-800 p-2 cursor-pointer
-                       w-[100px] sm:w-[130px] transition-transform duration-300 group"
-        >
-            {/* Icon Container: Circular background and shadow */}
-            <div 
-                className="w-[90px] h-[90px] sm:w-[100px] sm:h-[100px] rounded-full bg-white flex items-center justify-center 
-                           shadow-md ring-1 ring-inset ring-gray-100/50 mb-3 
-                           group-hover:shadow-xl transition-shadow duration-300"
-            >
-                {iconPath ? (
-                    <img 
-                        src={imgSrc} 
-                        alt={`${name} Icon`} 
-                        className="w-12 h-12 object-contain" 
-                    />
-                ) : (
-                    <div className="text-sm font-semibold text-gray-400">?</div>
-                )}
-            </div>
-            
-            {/* Text Name */}
-            <span className="text-xs sm:text-sm font-semibold text-center whitespace-nowrap text-gray-700 group-hover:text-primary-dark transition-colors duration-300">
-                {name}
-            </span>
-        </motion.div>
-    );
-};
-
-
-// --- Data Arrays (Paths added instead of components) ---
-
+// --- Data Arrays ---
 const techStackData = {
   enterprise: [ 
     { name: 'Java', iconPath: 'client-logo-2.png' }, 
@@ -126,15 +80,53 @@ const techStackData = {
 };
 
 
-// --- 3. TechSection Component (The Wrapper with Scroll Animation) ---
+// --- TechPill Component (Redesigned) ---
+const TechPill = ({ name, iconPath }) => {
+    // Assuming images are in public/images/
+    const imgSrc = `/images/${iconPath}`;
 
-/**
- * Renders a single category section, with Framer Motion scroll animation.
- */
+    return (
+        <motion.div
+            // Hover Animation: Lift & Border Color Change
+            whileHover={{ y: -5 }}
+            className="group relative flex flex-col items-center justify-center p-4 rounded-2xl bg-white border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-transparent"
+        >
+            {/* Hover Border Gradient Trick */}
+            <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-[var(--color-primary-light)] transition-colors duration-300 pointer-events-none"></div>
+
+            {/* Icon Container */}
+            <div 
+                className="w-14 h-14 rounded-full bg-blue-50/50 flex items-center justify-center mb-3 group-hover:bg-blue-100/50 transition-colors duration-300"
+            >
+                {iconPath ? (
+                    <img 
+                        src={imgSrc} 
+                        alt={`${name} Icon`} 
+                        className="w-8 h-8 object-contain"
+                        loading="lazy" 
+                    />
+                ) : (
+                    <div className="text-xs font-bold text-gray-400">?</div>
+                )}
+            </div>
+            
+            {/* Text Name */}
+            <span 
+                className="text-xs font-bold text-center text-gray-600 group-hover:text-[var(--color-primary-dark)] transition-colors duration-300"
+            >
+                {name}
+            </span>
+        </motion.div>
+    );
+};
+
+
+// --- TechSection Component (Category Wrapper) ---
 const TechSection = ({ title, data }) => {
   const containerVariants = {
-    hidden: {},
+    hidden: { opacity: 0 },
     visible: {
+      opacity: 1,
       transition: {
         staggerChildren: 0.05,
       },
@@ -142,25 +134,27 @@ const TechSection = ({ title, data }) => {
   };
   
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1 },
   };
 
   return (
-    <motion.div
-      className="mb-16" // 🎯 FIX: Increased bottom margin for more separation
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }}
-    >
-      {/* Sub-section Heading */}
-      <h3 className="text-xl font-normal mb-6 text-gray-600 border-b border-gray-400/30 pb-2">
-        {title}
-      </h3>
+<div className="">
+  <div className="flex items-center gap-3 mb-4">
+
+        <h3 className="text-xl md:text-2xl font-bold text-[var(--color-primary-dark)]">
+            {title}
+        </h3>
+        <div className="h-px flex-grow bg-gray-200"></div>
+      </div>
       
+      {/* Grid Layout for Pills */}
       <motion.div
-        className="flex flex-wrap gap-y-6 gap-x-4 justify-center sm:justify-start"
+        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6"
         variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
       >
         {data.map((tech, index) => (
           <motion.div key={index} variants={itemVariants}>
@@ -168,87 +162,97 @@ const TechSection = ({ title, data }) => {
           </motion.div>
         ))}
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 
 
-// --- 4. Main Component Export (Header Fixed) ---
-
+// --- Main Component ---
 const TechStackSection = () => {
-    const primaryLight = "#2DACE3";
-
     return (
-        <section className="px-4 sm:px-6 lg:px-8 pb-1 bg-gray-50">
+        <section className="relative w-full py-24 md:py-32 overflow-hidden bg-white">
+            
+            {/* --- Background: Light Mesh Pattern --- */}
+            <div
+                className="absolute inset-0 z-0 pointer-events-none"
+                style={{
+                backgroundImage: `
+                    linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px)
+                `,
+                backgroundSize: "40px 40px",
+                }}
+            ></div>
+
+            {/* Subtle Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white pointer-events-none z-0"></div>
 
             
-            {/* Section Header */}
-            <div className="text-center mb-12">
+            <div className="container relative z-10 mx-auto px-4">
                 
-                {/* 1. "The Tech Stacks" (Small, Uppercase, Light Color) */}
-                <motion.span 
-                    className="text-sm font-semibold uppercase tracking-widest block"
-                    style={{ color: primaryLight }}
+                {/* Section Header */}
+                <motion.div 
+                    className="text-center mb-16 max-w-4xl mx-auto"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.8 }}
-                    transition={{ duration: 0.5 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.7 }}
                 >
-                    The Tech Stacks
-                </motion.span>
-                
-                {/* 2. "Our Deep Expertise" (Big, Bold, Gradient) */}
-                <motion.span
-                    className="mt-2 text-4xl sm:text-5xl lg:text-5xl font-extrabold text-gray-900 block"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.7 }}
-                    transition={{ duration: 0.6, delay: 0.1 }}
-                >
-                    <span>
+                   
+                    
+                    {/* Gradient Heading */}
+                    <h2 
+                        className="text-4xl md:text-5xl font-extrabold tracking-tight"
+                        style={{
+                            background: "var(--gradient-primary)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            backgroundClip: "text",
+                        }}
+                    >
                         Our Deep Expertise
-                    </span>
-                </motion.span>
-                
-            </div>
+                    </h2>
+                </motion.div>
 
-            <div className="max-w-7xl mx-auto">
-                
-                <TechSection
-                    title="Enterprise Software Development | Big Data | Data Analytics | Cloud Computing"
-                    data={techStackData.enterprise}
-                />
-                
-                <TechSection
-                    title="Web Development"
-                    data={techStackData.webDev}
-                />
+                {/* Content Sections */}
+                <div className="max-w-7xl mx-auto">
+                    
+                    <TechSection
+                        title="Enterprise Software & Big Data"
+                        data={techStackData.enterprise}
+                    />
+                    
+                    <TechSection
+                        title="Web Development"
+                        data={techStackData.webDev}
+                    />
 
-                <TechSection
-                    title="Internet of Things (IoT) Development"
-                    data={techStackData.iot}
-                />
+                    <TechSection
+                        title="Internet of Things (IoT)"
+                        data={techStackData.iot}
+                    />
 
-                <TechSection
-                    title="Blockchain Development"
-                    data={techStackData.blockchain}
-                />
-                
-                <TechSection
-                    title="Mobile Application Development"
-                    data={techStackData.mobile}
-                />
+                    <TechSection
+                        title="Blockchain Development"
+                        data={techStackData.blockchain}
+                    />
+                    
+                    <TechSection
+                        title="Mobile Application"
+                        data={techStackData.mobile}
+                    />
 
-                <TechSection
-                    title="Artificial Intelligence/Machine Learning"
-                    data={techStackData.aiMl}
-                />
+                    <TechSection
+                        title="AI & Machine Learning"
+                        data={techStackData.aiMl}
+                    />
 
-                <TechSection
-                    title="Augmented & Virtual Reality Development"
-                    data={techStackData.arVr}
-                />
-                
+                    <TechSection
+                        title="AR / VR Development"
+                        data={techStackData.arVr}
+                    />
+                    
+                </div>
             </div>
         </section>
     );

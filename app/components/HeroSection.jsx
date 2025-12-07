@@ -28,12 +28,12 @@ const textVariants = {
 };
 
 // --- Hero Card Component (Right Side) ---
-const HeroCard = ({ imageSrc, serviceName }) => (
+const HeroCard = ({ imageSrc, serviceName, direction }) => (
     <motion.div
         key={serviceName} // Key is crucial for Framer Motion exit/enter transitions
-        initial={{ opacity: 0, scale: 0.9, rotateY: 15, rotateZ: -1 }} // More dramatic, 3D entrance
-        animate={{ opacity: 1, scale: 1, rotateY: 0, rotateZ: 0 }}
-        exit={{ opacity: 0, scale: 0.9, rotateY: -15, rotateZ: 1 }} // Smooth exit
+        initial={{ y: direction === 'up' ? 100 : -100, opacity: 0, scale: 0.9, rotateY: 15, rotateZ: -1 }} // More dramatic, 3D entrance
+        animate={{ y: 0, opacity: 1, scale: 1, rotateY: 0, rotateZ: 0 }}
+        exit={{ y: direction === 'up' ? -100 : 100, opacity: 0, scale: 0.9, rotateY: -15, rotateZ: 1 }} // Smooth exit
         // SMOOTHER DURATION & EASE: Increased duration for a gentler transition
         transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }} 
         className="w-full h-full p-6 shadow-2xl rounded-3xl bg-white/5 backdrop-blur-md border border-white/20 relative overflow-hidden" // Increased roundedness
@@ -72,12 +72,14 @@ const HeroCard = ({ imageSrc, serviceName }) => (
 // --- Main Hero Section Component (Left & Right) ---
 const HeroSection = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [direction, setDirection] = useState('up'); // State to track direction
 
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) => 
                 (prevIndex + 1) % services.length
             );
+            setDirection((prevDirection) => prevDirection === 'up' ? 'down' : 'up'); // Toggle direction
         }, 3000); // Change service every 3 seconds
 
         return () => clearInterval(interval);
@@ -176,6 +178,7 @@ const HeroSection = () => {
                                 <HeroCard 
                                     imageSrc={currentImage} 
                                     serviceName={currentService} 
+                                    direction={direction} // Pass direction prop
                                 />
                             </AnimatePresence>
                         </div>

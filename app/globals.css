@@ -11,3 +11,7 @@ body {
     /* 🌈 Custom Gradient */
     --gradient-primary: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary-light));
 }
+
+.bg-gradient-primary {
+    background: var(--gradient-primary);
+}

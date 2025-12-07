@@ -26,7 +26,7 @@ const filterVariants = {
   visible: { opacity: 1, scale: 1, transition: { duration: 0.5, type: "spring", stiffness: 100 } },
 };
 
-const ServicesHeroSection = () => {
+const IndustriesHero = () => {
   // Define custom styles based on the theme variables
   const primaryDark = '#355694';
   const primaryLight = '#2DACE3';
@@ -47,7 +47,7 @@ const ServicesHeroSection = () => {
         <div 
           className="w-full h-full bg-cover bg-center" 
           style={{ 
-            backgroundImage: "url('/images/tech-bg-placeholder.png')", // Change this path
+            backgroundImage: "url('/images/industry_bg.webp')", // Change this path
             backgroundColor: "#000", // Fallback color
           }}
           aria-hidden="true"
@@ -96,7 +96,7 @@ const ServicesHeroSection = () => {
             >
               •
             </span>
-            Services
+            Industries
           </motion.div>
 
           {/* B. Heading (Two lines) */}
@@ -104,9 +104,10 @@ const ServicesHeroSection = () => {
             className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-4"
             variants={itemVariants}
           >
-            The Future is
+            Driving the Next
             <br />
-            <span style={{ color: accentOrange }}>Intelligent</span> and Connected
+             Wave of
+            <span style={{ color: accentOrange }}> Industrial</span> Excellence
           </motion.h1>
 
           {/* C. Paragraph (Two lines) */}
@@ -114,8 +115,7 @@ const ServicesHeroSection = () => {
             className="text-lg md:text-xl font-light opacity-85 mt-6 max-w-lg"
             variants={itemVariants}
           >
-            Explore the cutting-edge innovations driving global transformation, from
-            AI-powered systems to hyper-efficient quantum computing.
+            Blute Technologies partners with enterprises to understand their workflows and adopt the right technologies.We build high-performance software faster, solving real operational challenges across industries.
           </motion.p>
         </div>
       </motion.div>
@@ -123,4 +123,4 @@ const ServicesHeroSection = () => {
   );
 };
 
-export default ServicesHeroSection;
+export default IndustriesHero;

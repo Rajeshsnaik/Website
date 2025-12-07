@@ -38,22 +38,13 @@ const projects = [
 ];
 
 // --- Helper Hook to Detect Mobile ---
-// In a real application, you'd use a useMediaQuery hook, but for a simple fix, 
-// checking Tailwind's 'sm' breakpoint (640px) is sufficient here.
-// Note: Framer Motion's 'whileHover' will be ignored on mobile touch devices by default,
-// but we'll use a check to ensure the 'Know More' button is visible.
 const useIsMobile = () => {
-    // This is a basic client-side check. For SSR/CSR consistency, a full useMediaQuery 
-    // hook or Framer Motion's own 'useInvertedRerender' is often better, but this works 
-    // for simple responsiveness.
     const [isMobile, setIsMobile] = React.useState(false);
 
     React.useEffect(() => {
-        // Set mobile to true if window width is less than the medium breakpoint (768px in default Tailwind config)
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768);
         };
-
         checkMobile();
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
@@ -62,43 +53,33 @@ const useIsMobile = () => {
     return isMobile;
 };
 
-
 // --- Card Component (Project Cards 1, 2, 3) ---
 const ProjectCard = ({ project }) => {
-    // REMOVED isHovered state as whileHover handles effects better, but we need
-    // to check if we should even use the hover effect logic.
     const isMobile = useIsMobile();
     
-    // Variants for the image scale on hover (only applicable on desktop)
     const imageHoverVariants = {
         rest: { scale: 1 },
         hover: { scale: 1.07, transition: { duration: 0.5 } }
     };
 
-    // Variants for the button visibility: ALWAYS visible on mobile, visible on hover on desktop
     const buttonVariants = {
         rest: { opacity: 0, y: 10 },
         hover: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-        mobile: { opacity: 1, y: 0, transition: { duration: 0 } } // ALWAYS visible on mobile
+        mobile: { opacity: 1, y: 0, transition: { duration: 0 } }
     };
 
     return (
         <motion.a 
             href={project.link}
-            // MODIFIED: Added min-h-[400px] on mobile (sm:) to ensure a minimum size, 
-            // Removed explicit hover styles for better mobile touch. Added group for the inner 'Know More' button logic.
             className="flex flex-col rounded-xl shadow-lg bg-white overflow-hidden transition-all duration-300 sm:hover:shadow-2xl cursor-pointer h-full group"
-            // Removed onMouseEnter/onMouseLeave, relying on whileHover
             initial="rest"
-            whileHover={isMobile ? "mobile" : "hover"} // Use 'hover' only on non-mobile
-            animate={isMobile ? "mobile" : "rest"} // Keep initial state or mobile state
+            whileHover={isMobile ? "mobile" : "hover"} 
+            animate={isMobile ? "mobile" : "rest"}
         >
-            {/* Image Container (60% on desktop, more flexible on mobile) */}
-            {/* MODIFIED: Used aspect-square on small screens and a defined height on larger screens */}
+            {/* Image Container */}
             <div className="relative w-full overflow-hidden aspect-[4/3] md:h-[65%]">
                 <motion.div 
                     variants={imageHoverVariants}
-                    // Only apply hover effect on non-mobile
                     animate={isMobile ? "rest" : undefined}
                     className="absolute inset-0"
                 >
@@ -112,7 +93,7 @@ const ProjectCard = ({ project }) => {
                     />
                 </motion.div>
 
-                {/* Industry Label (Bottom-Left) */}
+                {/* Industry Label */}
                 <div className="absolute bottom-4 left-4 z-10">
                     <div 
                         className="flex items-center rounded-full py-1 px-3 text-white text-xs font-semibold backdrop-blur-sm"
@@ -123,10 +104,9 @@ const ProjectCard = ({ project }) => {
                     </div>
                 </div>
 
-                {/* Know More Button (Appears on Hover on desktop, always visible on mobile) */}
+                {/* Know More Button */}
                 <motion.div 
                     variants={buttonVariants}
-                    // MODIFIED: Always visible on mobile by default using 'mobile' variant
                     animate={isMobile ? "mobile" : "rest"} 
                     className="absolute inset-0 flex items-center justify-center bg-black/30 z-20"
                 >
@@ -139,8 +119,7 @@ const ProjectCard = ({ project }) => {
                 </motion.div>
             </div>
 
-            {/* Text Content (40% on desktop, more flexible on mobile) */}
-            {/* MODIFIED: Removed fixed height percentage */}
+            {/* Text Content */}
             <div className="p-4 md:p-5 flex flex-col justify-between flex-grow">
                 <div>
                     <h3 className="text-lg md:text-xl font-bold mb-1 md:mb-2" style={{ color: primaryDark }}>
@@ -155,11 +134,9 @@ const ProjectCard = ({ project }) => {
     );
 };
 
-
 // --- Metric Card Component (Card 4) ---
 const MetricCard = () => (
     <div 
-        // MODIFIED: Adjusted padding and font sizes for mobile (p-6, text-5xl, text-2xl)
         className="flex flex-col justify-center items-center p-6 md:p-8 rounded-xl shadow-lg text-center h-full min-h-[300px] md:min-h-[400px]"
         style={{ 
             background: `linear-gradient(145deg, ${primaryDark}, ${primaryLight})`,
@@ -170,7 +147,6 @@ const MetricCard = () => (
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 100, delay: 0.1 }}
-            // MODIFIED: Smaller text on mobile
             className="text-5xl md:text-7xl font-extrabold mb-2"
             style={{ color: accentOrange }}
         >
@@ -200,26 +176,30 @@ const MetricCard = () => (
     </div>
 );
 
-
 // --- Main Section Component ---
 const OurSolutions = () => {
     return (
         <section className="py-12 md:py-24" style={{ backgroundColor: '#ffffff' }}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 
-                {/* Title */}
-                <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 md:mb-12" style={{ color: primaryDark }}>
+                {/* UPDATED TITLE: 
+                  - Gradient Text using configuration colors
+                  - Larger Font Size (text-4xl md:text-5xl)
+                */}
+                <h2 
+                    className="text-4xl md:text-5xl font-extrabold text-center mb-10 md:mb-16"
+                    style={{
+                        background: `linear-gradient(135deg, ${primaryDark}, ${primaryLight})`,
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                        color: "transparent" // Fallback
+                    }}
+                >
                     Our Solutions
                 </h2>
 
-                {/* Grid Layout FIX: 
-                    - On **mobile (default)**: `grid-cols-1` (1 card per row).
-                    - On **medium screens (md)**: `grid-cols-2` (2 cards per row).
-                    - On **large screens (lg)**: `grid-cols-4` (4 cards per row).
-                    The original code already had this structure, but making sure the cards 
-                    are visually pleasing when stacked in one column is key. 
-                    The ProjectCard and MetricCard changes handle the visual balance. 
-                */}
+                {/* Grid Layout */}
                 <motion.div 
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
                     initial="hidden"

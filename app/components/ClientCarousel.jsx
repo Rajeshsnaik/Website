@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-// --- 1. Data Definition (Remains the same) ---
+// --- Data ---
 const clientLogos = [
   { id: 1, name: 'Client A', imageUrl: '/images/client-logo-1.png' },
   { id: 2, name: 'Client B', imageUrl: '/images/client-logo-2.png' },
@@ -15,31 +15,18 @@ const clientLogos = [
   { id: 8, name: 'Client H', imageUrl: '/images/client-logo-8.png' },
   { id: 9, name: 'Client I', imageUrl: '/images/client-logo-9.png' },
   { id: 10, name: 'Client J', imageUrl: '/images/client-logo-10.png' },
-  // Duplicate a few logos for seamless loop
-  { id: 11, name: 'Client A', imageUrl: '/images/client-logo-1.png' },
-  { id: 12, name: 'Client B', imageUrl: '/images/client-logo-2.png' },
-  { id: 13, name: 'Client C', imageUrl: '/images/client-logo-3.png' },
 ];
 
-// --- 2. Framer Motion Variants / Animation Setup (Remains the same) ---
+// --- Animation Variants ---
 const carouselVariants = {
-  start: {
-    x: 0,
-    transition: {
-      duration: 0, 
-    },
-  },
   animate: {
-    // The translation needs to be recalculated for the 4-logo mobile view 
-    // to ensure a smooth transition, but the main animation setup remains the same.
-    x: [0, -((100 / 6) * 7) + '%'], 
+    x: ["0%", "-50%"], 
     transition: {
       x: {
         repeat: Infinity,
         repeatType: "loop",
-        duration: 35,
+        duration: 30,
         ease: "linear",
-        delay: 2, 
       },
     },
   },
@@ -47,40 +34,69 @@ const carouselVariants = {
 
 const ClientCarousel = () => {
   return (
-    <section className="py-16 sm:py-24 bg-gray-50 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-          Our Clients
-        </h2>
-        <p className="mt-2 max-w-3xl mx-auto text-lg text-gray-600">
-          Trusted by leading companies across various industries.
-        </p>
+    // Reverted to gray-50 background, reduced padding
+    <section className="relative w-full py-10 md:py-16 overflow-hidden bg-gray-50">
+      
+      {/* Subtle Center Glow to differentiate */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+            background: "radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, transparent 70%)"
+        }}
+      ></div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        
+        <div className="mb-10">
+            {/* Eyebrow Label */}
+            <span 
+                className="inline-block py-1 px-3 rounded-full text-xs font-bold tracking-widest mb-3 border border-blue-100"
+                style={{ 
+                    backgroundColor: "rgba(255, 255, 255, 0.5)", 
+                    color: "var(--color-primary-light)" 
+                }}
+            >
+                Trusted Partners
+            </span>
+
+            {/* Gradient Heading */}
+            <h2 
+                className="text-3xl md:text-4xl font-extrabold"
+                style={{
+                    background: "var(--gradient-primary)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                }}
+            >
+                Our Valued Clients
+            </h2>
+        </div>
+
       </div>
 
-      <div className="mt-12 relative">
-        <div className="absolute inset-y-0 left-0 w-1/12 bg-gradient-to-r from-gray-50 to-transparent z-10"></div>
-        <div className="absolute inset-y-0 right-0 w-1/12 bg-gradient-to-l from-gray-50 to-transparent z-10"></div>
+      <div className="relative w-full">
+        {/* Side Fades - Matching gray-50 background */}
+        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none"></div>
+        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none"></div>
         
-        <div className="flex overflow-hidden py-4">
+        <div className="flex overflow-hidden">
           <motion.div
-            className="flex flex-nowrap"
+            className="flex items-center gap-12 md:gap-20 px-4"
             variants={carouselVariants}
-            initial="start" 
             animate="animate" 
+            style={{ width: "fit-content" }}
           >
+            {/* Double Loop */}
             {[...clientLogos, ...clientLogos].map((client, index) => (
               <div 
-                key={client.id + '-' + index} 
-                // --- KEY CHANGE: Use w-1/4 for mobile (default and sm) ---
-                // w-1/4 (25% width) = 4 visible logos
-                // md:w-1/4 (4 visible) - Kept the same
-                // lg:w-1/6 (16.66% width) = 6 visible logos (Laptop view)
-                className="flex-none w-1/4 md:w-1/4 lg:w-1/6 p-4 flex items-center justify-center"
+                key={`${client.id}-${index}`}
+                className="flex-shrink-0 w-28 md:w-36 flex items-center justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 hover:scale-105 transition-all duration-500 cursor-pointer"
               >
                 <img
                   src={client.imageUrl}
                   alt={client.name}
-                  className="max-h-16 w-auto object-contain filter grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition duration-300"
+                  className="max-h-12 md:max-h-14 w-auto object-contain"
                   loading="lazy" 
                 />
               </div>

@@ -1,71 +1,74 @@
 "use client";
 
 import React, { useState } from 'react';
+import Link from 'next/link'; // Import Link
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
 // --- Icon Imports ---
-import { FiLayers, FiCode, FiUsers, FiSettings, FiClipboard } from 'react-icons/fi';
-import { BsGraphUp, BsShieldCheck } from 'react-icons/bs';
-import { MdOutlineSmartphone, MdAttachMoney, MdOutlineLaptopMac, MdLocationCity } from 'react-icons/md';
+import { 
+  FiLayers, FiCode, FiSettings, FiClipboard, FiCpu, FiShield, FiDatabase, FiGlobe
+} from 'react-icons/fi';
+import { BsGraphUp, BsShieldCheck, BsCart3 } from 'react-icons/bs';
+import { 
+  MdOutlineSmartphone, MdAttachMoney, MdOutlineLaptopMac, MdLocationCity, MdOutlineFactory, MdSchool, MdFlightTakeoff 
+} from 'react-icons/md';
 import { TbClipboardText } from 'react-icons/tb'; 
 
 // --- Configuration ---
 const primaryDark = '#355694'; 
-const primaryLight = '#2DACE3'; 
-const accentOrange = '#F6A25C'; 
 
-const sectionBackgroundColor = '#F0F5F9'; 
+// --- 1. DATA LISTS WITH LINKS ---
 
-// --- Data Lists ---
 const servicesList = [
-    { name: 'Mobile Application Development', icon: MdOutlineSmartphone, link: '#' },
-    { name: 'Custom Software Development', icon: MdOutlineLaptopMac, link: '#' },
-    { name: 'IT Consulting & Strategy', icon: FiClipboard, link: '#' },
-    { name: 'UI / UX Design', icon: BsGraphUp, link: '#' },
-    { name: 'QA & Testing Automation', icon: TbClipboardText, link: '#' },
-];
-
-const technologiesList = [
-    { name: 'Frontend (React/Vue/Angular)', icon: FiLayers, link: '#' },
-    { name: 'Backend (Node.js/Python/Java)', icon: FiCode, link: '#' },
-    { name: 'Cloud Computing (AWS/Azure/GCP)', icon: FiSettings, link: '#' },
-    { name: 'Data & AI/ML', icon: BsGraphUp, link: '#' },
-    { name: 'DevOps & CI/CD', icon: BsShieldCheck, link: '#' },
+    { name: 'Mobile App Development', icon: MdOutlineSmartphone, path: '/services/mobile-app-development' },
+    { name: 'Custom Software Dev', icon: MdOutlineLaptopMac, path: '/services/custom-software' },
+    { name: 'IT Consulting & Strategy', icon: FiClipboard, path: '/services/it-consulting' },
+    { name: 'UI / UX Design', icon: BsGraphUp, path: '/services/ui-ux-design' },
+    { name: 'QA & Automation', icon: TbClipboardText, path: '/services/qa-automation' },
+    { name: 'Cloud Solutions', icon: FiSettings, path: '/services/cloud-solutions' },
+    { name: 'Cyber Security', icon: FiShield, path: '/services/cyber-security' },
+    { name: 'Data Analytics', icon: FiDatabase, path: '/services/data-analytics' },
 ];
 
 const industriesList = [
-    { name: 'FinTech & Banking', icon: MdAttachMoney, link: '#' },
-    { name: 'Healthcare & Pharma', icon: FiClipboard, link: '#' },
-    { name: 'E-commerce & Retail', icon: MdOutlineSmartphone, link: '#' },
-    { name: 'Real Estate & PropTech', icon: MdLocationCity, link: '#' },
-    { name: 'Logistics & Supply Chain', icon: FiUsers, link: '#' },
+    { name: 'FinTech & Banking', icon: MdAttachMoney, path: '/industries/fintech' },
+    { name: 'Healthcare & Pharma', icon: FiClipboard, path: '/industries/healthcare' },
+    { name: 'E-commerce & Retail', icon: BsCart3, path: '/industries/retail' },
+    { name: 'Real Estate', icon: MdLocationCity, path: '/industries/real-estate' },
+    { name: 'Logistics', icon: FiGlobe, path: '/industries/logistics' },
+    { name: 'Manufacturing', icon: MdOutlineFactory, path: '/industries/manufacturing' },
+    { name: 'Education', icon: MdSchool, path: '/industries/education' },
+    { name: 'Travel & Hospitality', icon: MdFlightTakeoff, path: '/industries/travel' },
 ];
 
-// --- NEW LEFT CARD DATA STRUCTURE ---
+const technologiesList = [
+    { name: 'Frontend (React/Vue)', icon: FiLayers, path: '/technologies/frontend' },
+    { name: 'Backend (Node/Python)', icon: FiCode, path: '/technologies/backend' },
+    { name: 'Cloud & DevOps', icon: BsShieldCheck, path: '/technologies/cloud-devops' },
+    { name: 'AI & Machine Learning', icon: FiCpu, path: '/technologies/ai-ml' },
+];
+
+// --- Card Data with Main Landing Page Links ---
 const leftCardData = {
     services: {
         title: 'Bespoke Software Services',
-        description: 'We deliver end-to-end digital solutions, from initial concept design and development to full-scale deployment and maintenance.',
-        image: '/images/services_bg.jpg' // PLACEHOLDER IMAGE 1
+        description: 'End-to-end digital solutions, from concept to full-scale deployment.',
+        image: '/images/services-bg.webp',
+        path: '/services' // Main landing page
     },
     technologies: {
         title: 'Technology & Architecture',
-        description: 'Leverage modern, scalable frameworks and cloud-native architecture for high performance, security, and future-proof systems.',
-        image: '/images/tech_bg.jpg' // PLACEHOLDER IMAGE 2
+        description: 'Modern, scalable frameworks and cloud-native architecture.',
+        image: '/images/tech_bg.webp',
+        path: '/technologies'
     },
     industries: {
-        title: 'Industry-Specific Solutions',
-        description: 'Our domain expertise allows us to craft targeted digital products that solve complex challenges specific to your market sector.',
-        image: '/images/industry_bg.jpg' // PLACEHOLDER IMAGE 3
+        title: 'Industry Solutions',
+        description: 'Domain expertise crafting targeted digital products for your sector.',
+        image: '/images/industry_bg.jpg',
+        path: '/industries'
     }
-};
-
-// Map filter keys to a representative icon for the intersecting icon
-const filterIcons = {
-    'services': MdOutlineSmartphone,
-    'technologies': FiCode,
-    'industries': MdLocationCity,
 };
 
 const tabs = [
@@ -74,21 +77,18 @@ const tabs = [
     { name: 'Industries', key: 'industries' },
 ];
 
-// --- Framer Motion Variants (no change) ---
+// --- Variants ---
 const listContainerVariants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
-        transition: {
-            when: "beforeChildren",
-            staggerChildren: 0.08, 
-        }
+        transition: { staggerChildren: 0.05 }
     }
 };
 
 const listItemVariants = {
-    hidden: { opacity: 0, x: 20 },
-    visible: { opacity: 1, x: 0, transition: { type: 'tween', duration: 0.25 } } 
+    hidden: { opacity: 0, x: 10 },
+    visible: { opacity: 1, x: 0, transition: { type: 'tween', duration: 0.2 } } 
 };
 
 const imageVariants = {
@@ -98,13 +98,13 @@ const imageVariants = {
 };
 
 const textCardVariants = {
-    initial: { y: 50, opacity: 0 },
+    initial: { y: 30, opacity: 0 },
     animate: { y: 0, opacity: 1, transition: { delay: 0.1, duration: 0.6, ease: "easeOut" } },
-    exit: { y: 50, opacity: 0, transition: { duration: 0.4, ease: "easeIn" } }
+    exit: { y: 30, opacity: 0, transition: { duration: 0.4, ease: "easeIn" } }
 };
 
 
-// Component for rendering the list items (Right Side - remains the same)
+// List Item Component
 const ServiceListItem = ({ list, activeTabKey }) => (
     <AnimatePresence mode="wait"> 
         <motion.div key={activeTabKey} className="h-full w-full">
@@ -112,24 +112,31 @@ const ServiceListItem = ({ list, activeTabKey }) => (
                 variants={listContainerVariants}
                 initial="hidden"
                 animate="visible"
-                className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-y-8 sm:gap-x-12 xl:grid-cols-2"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4"
             >
-                {list.map((item, index) => (
+                {list.map((item) => (
                     <motion.li
                         key={item.name}
                         variants={listItemVariants}
-                        className="flex items-start space-x-4 pr-4 py-1 group transition-all duration-200 hover:bg-gray-50 rounded-lg -mx-2 px-2 cursor-pointer"
                     >
-                        <div className="flex-shrink-0 p-3 rounded-full bg-white shadow-md relative group-hover:shadow-lg transition-shadow duration-300" 
-                             style={{ border: `1px solid ${primaryLight}` }}>
-                            <item.icon
-                                className="w-6 h-6"
-                                style={{ color: primaryDark }}
-                            />
-                        </div>
-                        <span className="text-lg text-gray-800 self-center group-hover:text-black transition-colors duration-200"> 
-                            {item.name}
-                        </span>
+                        <Link 
+                            href={item.path}
+                            className="flex items-center space-x-3 p-2 rounded-lg transition-all duration-200 hover:bg-gray-50 cursor-pointer group"
+                        >
+                            {/* Icon Box */}
+                            <div 
+                                className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-blue-50/50 group-hover:bg-blue-100/50 transition-colors duration-300"
+                            >
+                                <item.icon
+                                    size={20}
+                                    style={{ color: primaryDark }}
+                                />
+                            </div>
+                            {/* Text */}
+                            <span className="text-sm font-semibold text-gray-700 group-hover:text-black transition-colors duration-200 leading-tight"> 
+                                {item.name}
+                            </span>
+                        </Link>
                     </motion.li>
                 ))}
             </motion.ul>
@@ -143,163 +150,154 @@ const OfferingsSection = () => {
 
     const getContent = () => {
         switch (activeTab) {
-            case 'services':
-                return servicesList;
-            case 'technologies':
-                return technologiesList;
-            case 'industries':
-                return industriesList;
-            default:
-                return [];
+            case 'services': return servicesList;
+            case 'technologies': return technologiesList;
+            case 'industries': return industriesList;
+            default: return [];
         }
     };
 
-    const DynamicIcon = filterIcons[activeTab];
     const cardContent = leftCardData[activeTab]; 
 
-
     return (
-        <section 
-            className="py-16 md:py-24 overflow-hidden w-full" 
-            style={{ backgroundColor: sectionBackgroundColor }}
-        >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                {/* MODIFIED: Heading changed to Title Case */}
-                <h2 className="text-3xl md:text-4xl font-extrabold text-black text-center mb-12">
-                    Our Offerings
-                </h2>
+        <section className="relative w-full py-8 md:py-12 overflow-hidden bg-white">
+            
+            {/* Background Pattern */}
+            <div
+                className="absolute inset-0 z-0 pointer-events-none"
+                style={{
+                backgroundImage: `
+                    linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px)
+                `,
+                backgroundSize: "40px 40px",
+                }}
+            ></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white pointer-events-none z-0"></div>
 
-                {/* --- Tab Navigation Pill - MODIFIED FOR LARGER WIDTH AND CENTERED --- */}
-                <div className="flex justify-center mb-12 px-4 sm:px-0">
-                    <div 
-                        // MODIFIED: Increased max-width for a larger pill container
-                        className="flex bg-white rounded-full shadow-lg p-0.5 w-full max-w-lg" 
-                        style={{ borderRadius: '50px' }}
+            <div className="container relative z-10 mx-auto px-4 max-w-6xl">
+                
+                {/* Header */}
+                <motion.div 
+                    className="text-center mb-12"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.7 }}
+                >
+                    <h2 
+                        className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight"
+                        style={{
+                            background: "var(--gradient-primary)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            backgroundClip: "text",
+                        }}
                     >
+                        Our Offerings
+                    </h2>
+                </motion.div>
+
+                {/* Tabs */}
+                <div className="flex justify-center mb-12">
+                    <div className="flex bg-gray-100/50 backdrop-blur-sm rounded-full p-1.5 shadow-inner">
                         {tabs.map((tab) => {
                             const isTabActive = activeTab === tab.key;
-                            
                             return (
-                                <motion.button
+                                <button
                                     key={tab.key}
                                     onClick={() => setActiveTab(tab.key)}
-                                    // MODIFIED: Increased padding and font size for bigger buttons
-                                    className={`relative w-1/3 py-3 px-2 sm:px-10 text-sm sm:text-base font-semibold transition-colors duration-300 ease-in-out flex-shrink-0 focus:outline-none`}
-                                    style={isTabActive ? { color: 'white' } : { color: primaryDark }}
+                                    className={`relative px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 z-10 ${
+                                        isTabActive ? 'text-white shadow-md' : 'text-gray-500 hover:text-gray-900'
+                                    }`}
                                 >
                                     {isTabActive && (
                                         <motion.div
                                             layoutId="tabIndicator"
-                                            transition={{ type: 'spring', stiffness: 500, damping: 50 }}
-                                            className="absolute inset-0 z-0 rounded-full"
-                                            style={{ backgroundImage: `linear-gradient(to right, ${primaryDark}, ${primaryLight})` }} 
+                                            className="absolute inset-0 rounded-full z-[-1]"
+                                            style={{ background: "var(--gradient-primary)" }}
+                                            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                                         />
                                     )}
-
-                                    <span className="relative z-10">
-                                        {tab.name} 
-                                    </span>
-                                </motion.button>
+                                    {tab.name}
+                                </button>
                             );
                         })}
                     </div>
                 </div>
-                {/* --- End Tab Navigation Pill --- */}
 
-                {/* --- Content Area (no change) --- */}
-                <div className="max-w-[1200px] mx-auto w-full relative">
-                    <motion.div
-                        key={activeTab + "-card-container"} 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-                        className="bg-white rounded-2xl shadow-xl p-0 flex flex-col md:flex-row min-h-[450px]"
-                        style={{ borderRadius: '20px' }} 
-                    >
+                {/* Content Card */}
+                <motion.div
+                    className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 flex flex-col md:flex-row min-h-[500px]"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                >
+                    
+                    {/* Left: Image Side (40%) */}
+                    <div className="relative w-full md:w-5/12 overflow-hidden h-64 md:h-auto">
+                        <AnimatePresence mode="wait">
+                            <motion.div 
+                                key={cardContent.image}
+                                variants={imageVariants}
+                                initial="initial"
+                                animate="animate"
+                                exit="exit"
+                                className="absolute inset-0"
+                            >
+                                <Image
+                                    src={cardContent.image}
+                                    alt={cardContent.title}
+                                    fill
+                                    className="object-cover"
+                                    sizes="(max-width: 768px) 100vw, 40vw"
+                                    unoptimized
+                                />
+                            </motion.div>
+
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+
+                            <motion.div 
+                                key={cardContent.title + "-text"}
+                                variants={textCardVariants}
+                                initial="initial"
+                                animate="animate"
+                                exit="exit"
+                                className="absolute bottom-0 left-0 right-0 p-8 z-20"
+                            >
+                                <div className="text-white">
+                                    <h3 className="text-2xl font-bold mb-3 leading-tight">
+                                        {cardContent.title}
+                                    </h3>
+                                    <p className="text-sm text-white/90 mb-5 leading-relaxed">
+                                        {cardContent.description}
+                                    </p>
+                                    
+                                    {/* Updated Link Button */}
+                                    <Link 
+                                        href={cardContent.path}
+                                        className="text-xs font-bold tracking-wider py-2 px-4 border border-white/40 rounded-full hover:bg-white hover:text-[var(--color-primary-dark)] transition-all duration-300 inline-block"
+                                    >
+                                        View More
+                                    </Link>
+                                </div>
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
+
+                    {/* Right: List Side (60%) */}
+                    <div className="w-full md:w-7/12 p-8 md:p-10 flex flex-col justify-center bg-white relative">
+                        <div className="absolute right-0 top-0 opacity-[0.03] pointer-events-none transform translate-x-1/4 -translate-y-1/4">
+                             <svg width="300" height="300" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                             </svg>
+                        </div>
                         
-                        {/* Left Side: Image and Layered Text Card (50% width) */}
-                        <div className="relative w-full md:w-6/12 flex-shrink-0 rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none overflow-hidden h-64 md:h-auto">
-                            
-                            {/* AnimatePresence for the image and text card content */}
-                            <AnimatePresence mode="wait">
-                                {/* 3rd Layer: The Image (Background) - Dynamic */}
-                                <motion.div 
-                                    key={cardContent.image} // Key must be image path to trigger replacement
-                                    variants={imageVariants}
-                                    initial="initial"
-                                    animate="animate"
-                                    exit="exit"
-                                    className="absolute inset-0"
-                                >
-                                    <Image
-                                        src={cardContent.image}
-                                        alt={cardContent.title}
-                                        fill
-                                        style={{ objectFit: "cover" }}
-                                        sizes="(max-width: 768px) 100vw, 50vw"
-                                        priority={true}
-                                    />
-                                </motion.div>
+                        <ServiceListItem list={getContent()} activeTabKey={activeTab} />
+                    </div>
 
-                                {/* 2nd Layer: Gradient Overlay (Static) */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-10"></div>
+                </motion.div>
 
-                                {/* 1st Layer: Text Content Card with Smooth Slide Animation - Dynamic */}
-                                <motion.div 
-                                    key={cardContent.title + "-text"} // Key for text transition
-                                    variants={textCardVariants}
-                                    initial="initial"
-                                    animate="animate"
-                                    exit="exit"
-                                    className="absolute bottom-0 left-0 right-0 p-8 flex items-end z-20"
-                                >
-                                    <div className="text-white">
-                                        <h3 className="text-2xl font-bold mb-2">
-                                            {cardContent.title}
-                                        </h3>
-                                        
-                                        <p className="text-base mb-4 max-w-sm">
-                                            {cardContent.description}
-                                        </p>
-                                        
-                                        {/* Filter Title */}
-                                        {/* <p className="text-sm font-semibold mb-2 uppercase tracking-widest text-white/80">
-                                            {activeTab}
-                                        </p> */}
-
-                                        <a href="#" className="text-sm font-semibold py-2 px-5 border-2 border-white text-white hover:bg-white hover:text-black transition-colors duration-300 inline-block">
-                                            VIEW MORE &gt;
-                                        </a>
-                                    </div>
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-
-                        {/* Right Side: Services List / Tab Content (50% width) */}
-                        <div className="w-full md:w-6/12 p-6 md:p-12 flex flex-col justify-center">
-                            <ServiceListItem list={getContent()} activeTabKey={activeTab} />
-                        </div>
-                    </motion.div>
-
-                    {/* --- Floating Accent Icon (Commented out in original, kept commented) --- */}
-                    {/* <AnimatePresence mode="wait">
-                        <motion.div 
-                            key={activeTab + "-floating-icon"}
-                            initial={{ scale: 0, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0, opacity: 0 }}
-                            transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                            
-                            className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                                       p-5 rounded-full bg-white shadow-xl z-20 hidden md:block" 
-                            style={{ border: `1px solid ${primaryLight}`}}
-                        >
-                            {DynamicIcon && <DynamicIcon className="w-8 h-8" style={{ color: primaryLight }} />}
-                        </motion.div>
-                    </AnimatePresence> */}
-                </div>
-                {/* --- End Content Area --- */}
             </div>
         </section>
     );

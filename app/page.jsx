@@ -6,6 +6,7 @@ import OurSolutions from "./components/OurSolutions";
 import WhyChooseUsSection from "./components/WhyChooseUsSection";
 import FeedbackCode from "./components/Feedback";
 import "./globals.css"; // Ensure Tailwind styles are imported
+import Hero from "./components/Hero";
 
 
 export const metadata = {
@@ -80,7 +81,7 @@ export default function Home() {
     return (
         // Replaced inline styles with Tailwind classes
         <main >
-            <HeroSection />
+            <Hero />
             <ClientCarousel />
             <OfferingsSection />
             <OurSolutions />
