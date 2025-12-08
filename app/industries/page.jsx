@@ -7,7 +7,7 @@ import ValueProposition from "./ValueProposition";
 import WhyWeServe from "./WhyWeServe";
 
 
-const Technologies = () => {
+const Industries = () => {
     return (
         <>
         <IndustriesHero />
@@ -21,4 +21,4 @@ const Technologies = () => {
     )
 }
 
-export default Technologies;
+export default Industries;
