@@ -1,4 +1,5 @@
 "use client";
+
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -7,14 +8,23 @@ import { useEffect, useState } from "react";
 export default function NotFoundPage() {
   const pathname = usePathname();
   const router = useRouter();
-  const [prevUrl, setPrevUrl] = useState("");
 
+  const [prevUrl, setPrevUrl] = useState("");
+  const [origin, setOrigin] = useState("");
+
+  // Run only on client
   useEffect(() => {
-    setPrevUrl(document.referrer);
+    if (typeof window !== "undefined") {
+      setPrevUrl(document.referrer || "");
+      setOrigin(window.location.origin);
+    }
   }, []);
 
   const isHomeActive = pathname === "/";
-  const isGoBackActive = prevUrl.includes(window.location.origin); // came from internal page
+
+  // Safe check
+  const isGoBackActive =
+    prevUrl && origin ? prevUrl.includes(origin) : false;
 
   return (
     <section
